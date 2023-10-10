@@ -1,0 +1,10 @@
+spring:
+  h2:
+    console:
+      path: h2-console
+      enabled: true
+  datasource:
+    url: jdbc:h2:mem:ms-hub
+    driver-class-name: org.h2.Driver
+    username: admin
+    password: admin123
