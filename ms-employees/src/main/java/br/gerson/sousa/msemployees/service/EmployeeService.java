@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,8 +28,13 @@ public class EmployeeService {
         repository.save(dto.toModel());
     }
 
-    public List<Employee> findAll(){
-        return repository.findAll();
+    public List<FindEmployeeDto> findAll(){
+        List<Employee> employees = repository.findAll();
+        List<FindEmployeeDto> dtos = new ArrayList<>();
+        for (Employee emp: employees){
+            dtos.add(new FindEmployeeDto(emp));
+        }
+        return dtos;
     }
     public FindEmployeeDto findById(Long id){
         return new FindEmployeeDto(repository.findById(id).get());

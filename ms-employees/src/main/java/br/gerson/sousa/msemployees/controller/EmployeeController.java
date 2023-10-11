@@ -29,7 +29,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/employee")
-    public ResponseEntity<List<Employee>> findAll(){
+    public ResponseEntity<List<FindEmployeeDto>> findAll(){
         return ResponseEntity.status(HttpStatus.FOUND).body(service.findAll());
     }
 
