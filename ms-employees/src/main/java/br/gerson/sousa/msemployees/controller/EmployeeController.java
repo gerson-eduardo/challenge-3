@@ -53,4 +53,10 @@ public class EmployeeController {
         service.deleteByCpf(cpf);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Employee deleted successfully");
     }
+
+    @DeleteMapping("/employee/emp-id/{id}")
+    public ResponseEntity<String> deleteById(@PathVariable Long id){
+        service.deleteById(id);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Employee deleted successfully");
+    }
 }
