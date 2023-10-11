@@ -21,4 +21,12 @@ public class Employee {
     private String address;
     private String email;
     private String password;
+
+    public Employee(String name, String cpf, String address, String email, String password) {
+        this.name = name;
+        this.cpf = cpf;
+        this.address = address;
+        this.email = email;
+        this.password = password;
+    }
 }
