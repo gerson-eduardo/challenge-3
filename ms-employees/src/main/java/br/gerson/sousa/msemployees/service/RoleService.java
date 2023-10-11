@@ -36,7 +36,8 @@ public class RoleService {
         return roleRepository.findById(id);
     }
 
-    public Optional<Role> findByEmployee(Employee emp){
+    public Optional<Role> findByEmployee(String cpf){
+        Employee emp = employeeRepository.findByCpf(cpf).get();
         return roleRepository.findByEmployee(emp);
     }
 
