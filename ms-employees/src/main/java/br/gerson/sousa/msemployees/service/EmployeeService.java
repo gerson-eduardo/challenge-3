@@ -47,4 +47,12 @@ public class EmployeeService {
     public FindEmployeeDto findByCpf(String cpf){
         return new FindEmployeeDto(repository.findByCpf(cpf).get());
     }
+
+    public void deleteById(Long id){
+        repository.deleteById(id);
+    }
+
+    public void deleteByCpf(String cpf){
+        repository.deleteByCpf(cpf);
+    }
 }

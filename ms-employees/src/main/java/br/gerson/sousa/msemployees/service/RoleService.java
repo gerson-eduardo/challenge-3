@@ -52,7 +52,8 @@ public class RoleService {
         roleRepository.deleteById(id);
     }
 
-    public void deleteByEmployee(Employee emp){
+    public void deleteByEmployee(String cpf){
+        Employee emp = employeeRepository.findByCpf(cpf).get();
         roleRepository.deleteByEmployee(emp);
     }
 }

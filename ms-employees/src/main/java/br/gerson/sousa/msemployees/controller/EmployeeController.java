@@ -47,4 +47,16 @@ public class EmployeeController {
     public ResponseEntity<FindEmployeeDto> findByEmail(@PathVariable String email){
         return ResponseEntity.status(HttpStatus.FOUND).body(service.findByEmail(email));
     }
+
+    @DeleteMapping("/employee/emp-id/{cpf}")
+    public ResponseEntity<String> deleteByCpf(@PathVariable String  cpf){
+        service.deleteByCpf(cpf);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Employee deleted successfully");
+    }
+
+    @DeleteMapping("/employee/emp-id/{id}")
+    public ResponseEntity<String> deleteById(@PathVariable Long id){
+        service.deleteById(id);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Employee deleted successfully");
+    }
 }
