@@ -12,13 +12,9 @@ import java.util.Optional;
 public interface RoleRepository extends JpaRepository<Role, Long>{
 
     Role save(Role role);
-
     List<Role> findAll();
     Optional<Role> findById(Long id);
-
     Optional<Role> findByEmployee(Employee employee);
-
     void deleteById(Long id);
-
     void deleteByEmployee(Employee employee);
 }
