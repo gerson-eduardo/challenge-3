@@ -16,4 +16,9 @@ public class Role {
     @OneToOne
     private Employee employee;
     private String role;
+
+    public Role(Employee employee, String role) {
+        this.employee = employee;
+        this.role = role;
+    }
 }
