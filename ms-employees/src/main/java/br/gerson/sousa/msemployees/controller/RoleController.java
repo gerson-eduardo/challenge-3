@@ -1,5 +1,6 @@
 package br.gerson.sousa.msemployees.controller;
 
+import br.gerson.sousa.msemployees.dto.FindRoleDto;
 import br.gerson.sousa.msemployees.dto.SaveRoleDto;
 import br.gerson.sousa.msemployees.model.Role;
 import br.gerson.sousa.msemployees.service.RoleService;
@@ -29,7 +30,7 @@ public class RoleController {
     }
 
     @GetMapping("/role")
-    public ResponseEntity<List<Role>> findAll(){
+    public ResponseEntity<List<FindRoleDto>> findAll(){
         return ResponseEntity.status(HttpStatus.FOUND).body(service.findAll());
     }
 
@@ -39,7 +40,7 @@ public class RoleController {
     }
 
     @GetMapping("/role/employee/{cpf}")
-    public ResponseEntity<Role> findById(@PathVariable String cpf){
+    public ResponseEntity<Role> findByCpf(@PathVariable String cpf){
         return ResponseEntity.status(HttpStatus.FOUND).body(service.findByEmployee(cpf).get());
     }
 }
