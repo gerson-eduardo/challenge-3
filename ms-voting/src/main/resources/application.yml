@@ -1,0 +1,10 @@
+server:
+  port: 8082
+  servlet:
+    context-path: /ms-voting/
+
+spring:
+  application:
+    name: ms-voting
+  profiles:
+    active: dev
