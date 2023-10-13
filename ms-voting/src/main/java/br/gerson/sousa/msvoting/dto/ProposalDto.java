@@ -2,15 +2,15 @@ package br.gerson.sousa.msvoting.dto;
 
 import br.gerson.sousa.msvoting.model.Proposal;
 
-public class FindProposalDto {
+public class ProposalDto {
     private String name;
     private String description;
     private String creationDate;
     private String endingDate;
 
-    public FindProposalDto(){}
+    public ProposalDto(){}
 
-    public FindProposalDto(String name, String description, String creationDate, String endingDate) {
+    public ProposalDto(String name, String description, String creationDate, String endingDate) {
         this.name = name;
         this.description = description;
         this.creationDate = creationDate;
