@@ -17,6 +17,13 @@ public class ProposalDto {
         this.endingDate = endingDate;
     }
 
+    public ProposalDto(Proposal proposal){
+        this.name = proposal.getName();
+        this.description = proposal.getDescription();
+        this.creationDate = proposal.getCreationDate();
+        this.endingDate = proposal.getEndingDate();
+    }
+
     public Proposal toModel(){
         return new Proposal(
                 name,
