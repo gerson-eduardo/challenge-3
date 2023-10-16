@@ -3,7 +3,9 @@ package br.gerson.sousa.msemployees.service;
 import br.gerson.sousa.msemployees.dto.FindEmployeeDto;
 import br.gerson.sousa.msemployees.dto.SaveEmployeeDto;
 import br.gerson.sousa.msemployees.model.Employee;
+import br.gerson.sousa.msemployees.model.Role;
 import br.gerson.sousa.msemployees.repository.EmployeeRepository;
+import br.gerson.sousa.msemployees.repository.RoleRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,20 +18,24 @@ import java.util.Optional;
 @Service
 public class EmployeeService {
 
-    private EmployeeRepository repository;
+    private EmployeeRepository employeeRepository;
+    private RoleRepository roleRepository;
 
     @Autowired
-    public EmployeeService(EmployeeRepository repository){
-        this.repository = repository;
+    public EmployeeService(EmployeeRepository employeeRepository, RoleRepository roleRepository){
+        this.employeeRepository = employeeRepository;
+        this.roleRepository = roleRepository;
     }
 
     @Transactional
     public void save(SaveEmployeeDto dto){
-        repository.save(dto.toModel());
+        Employee emp = dto.toModel();
+        employeeRepository.save(emp);
+        roleRepository.save(new Role(emp, "USER"));
     }
 
     public List<FindEmployeeDto> findAll(){
-        List<Employee> employees = repository.findAll();
+        List<Employee> employees = employeeRepository.findAll();
         List<FindEmployeeDto> dtos = new ArrayList<>();
         for (Employee emp: employees){
             dtos.add(new FindEmployeeDto(emp));
@@ -37,22 +43,22 @@ public class EmployeeService {
         return dtos;
     }
     public FindEmployeeDto findById(Long id){
-        return new FindEmployeeDto(repository.findById(id).get());
+        return new FindEmployeeDto(employeeRepository.findById(id).get());
     }
 
     public FindEmployeeDto findByEmail(String email){
-        return new FindEmployeeDto(repository.findByEmail(email).get());
+        return new FindEmployeeDto(employeeRepository.findByEmail(email).get());
     }
 
     public FindEmployeeDto findByCpf(String cpf){
-        return new FindEmployeeDto(repository.findByCpf(cpf).get());
+        return new FindEmployeeDto(employeeRepository.findByCpf(cpf).get());
     }
 
     public void deleteById(Long id){
-        repository.deleteById(id);
+        employeeRepository.deleteById(id);
     }
 
     public void deleteByCpf(String cpf){
-        repository.deleteByCpf(cpf);
+        employeeRepository.deleteByCpf(cpf);
     }
 }
