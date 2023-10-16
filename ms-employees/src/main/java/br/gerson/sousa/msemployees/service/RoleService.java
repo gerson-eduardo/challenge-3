@@ -6,6 +6,7 @@ import br.gerson.sousa.msemployees.model.Employee;
 import br.gerson.sousa.msemployees.model.Role;
 import br.gerson.sousa.msemployees.repository.EmployeeRepository;
 import br.gerson.sousa.msemployees.repository.RoleRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,11 +26,12 @@ public class RoleService {
         this.employeeRepository = employeeRepository;
     }
 
+    @Transactional
     public int create(SaveRoleDto dto){
         Optional<Employee> emp = employeeRepository.findByCpf(dto.getCpf());
         if(emp.isEmpty()){
             return 404;
-        }else if(findByEmployee(dto.getCpf()).isPresent()){
+        }else if(findByCpf(dto.getCpf()).isPresent()){
             return 409;
         }else{
             roleRepository.save(new Role(emp.get(), dto.getRole()));
@@ -50,9 +52,20 @@ public class RoleService {
         return roleRepository.findById(id);
     }
 
-    public Optional<Role> findByEmployee(String cpf){
+    public Optional<Role> findByCpf(String cpf){
         Employee emp = employeeRepository.findByCpf(cpf).get();
         return roleRepository.findByEmployee(emp);
+    }
+
+    @Transactional
+    public int update(SaveRoleDto dto){
+        Optional<Employee> emp = employeeRepository.findByCpf(dto.getCpf());
+        if(emp.isEmpty() || findByCpf(emp.get().getCpf()).isEmpty()){
+            return 404;
+        }else{
+            roleRepository.save(new Role(emp.get(), dto.getRole()));
+            return 200;
+        }
     }
 
     public void deleteById(Long id){
