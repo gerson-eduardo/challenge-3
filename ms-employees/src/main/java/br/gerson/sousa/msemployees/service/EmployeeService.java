@@ -59,6 +59,17 @@ public class EmployeeService {
         return new FindEmployeeDto(employeeRepository.findByCpf(cpf).get());
     }
 
+    @Transactional
+    public int update(SaveEmployeeDto dto){
+        if(employeeRepository.findByCpf(dto.getCpf()).isEmpty()){
+            return 204;
+        }else{
+            Employee emp = dto.toModel();
+            employeeRepository.save(emp);
+            return 200;
+        }
+    }
+
     public void deleteById(Long id){
         employeeRepository.deleteById(id);
     }
