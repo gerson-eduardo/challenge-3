@@ -25,9 +25,16 @@ public class RoleService {
         this.employeeRepository = employeeRepository;
     }
 
-    public void save(SaveRoleDto dto){
-        Employee emp = employeeRepository.findByCpf(dto.getCpf()).get();
-        roleRepository.save(new Role(emp, dto.getRole()));
+    public int create(SaveRoleDto dto){
+        Optional<Employee> emp = employeeRepository.findByCpf(dto.getCpf());
+        if(emp.isEmpty()){
+            return 404;
+        }else if(findByEmployee(dto.getCpf()).isPresent()){
+            return 409;
+        }else{
+            roleRepository.save(new Role(emp.get(), dto.getRole()));
+            return 201;
+        }
     }
 
     public List<FindRoleDto> findAll(){
