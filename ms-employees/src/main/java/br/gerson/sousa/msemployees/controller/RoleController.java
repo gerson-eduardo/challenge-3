@@ -24,9 +24,17 @@ public class RoleController {
     }
 
     @PostMapping("/role")
-    public ResponseEntity<String> save(@RequestBody SaveRoleDto dto){
-        service.save(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Role created successfully");
+    public ResponseEntity<String> create(@RequestBody SaveRoleDto dto){
+        int status = service.create(dto);
+        String message;
+        if(status == 404){
+            message = "User not found";
+        }else if(status == 409) {
+            message = "Role already created";
+        }else {
+            message = "Role created successfully";
+        }
+        return ResponseEntity.status(status).body(message);
     }
 
     @GetMapping("/role")
