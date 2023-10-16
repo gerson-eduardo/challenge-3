@@ -49,7 +49,7 @@ public class RoleController {
 
     @GetMapping("/role/employee/{cpf}")
     public ResponseEntity<Role> findByCpf(@PathVariable String cpf){
-        return ResponseEntity.status(HttpStatus.FOUND).body(service.findByEmployee(cpf).get());
+        return ResponseEntity.status(HttpStatus.FOUND).body(service.findByCpf(cpf).get());
     }
 
 
