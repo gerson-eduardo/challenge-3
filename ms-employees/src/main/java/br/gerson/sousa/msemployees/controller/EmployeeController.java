@@ -23,9 +23,13 @@ public class EmployeeController {
     }
 
     @PostMapping("/employee")
-    public ResponseEntity<String > save(@RequestBody SaveEmployeeDto dto){
-        service.save(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Succes!");
+    public ResponseEntity<String > create(@RequestBody SaveEmployeeDto dto){
+        int status  = service.create(dto);
+        if (status == 409){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Employee already present!");
+        }else{
+            return ResponseEntity.status(HttpStatus.CREATED).body("Employee created!");
+        }
     }
 
     @GetMapping("/employee")
@@ -46,6 +50,16 @@ public class EmployeeController {
     @GetMapping("/employee/email/{email}")
     public ResponseEntity<FindEmployeeDto> findByEmail(@PathVariable String email){
         return ResponseEntity.status(HttpStatus.FOUND).body(service.findByEmail(email));
+    }
+
+    @PutMapping("/employee")
+    public ResponseEntity<String > update(@RequestBody SaveEmployeeDto dto){
+        int status = service.update(dto);
+        if(status == 204){
+            return ResponseEntity.status(204).body("Employee not found!");
+        }else{
+            return ResponseEntity.status(200).body("Employee updated!");
+        }
     }
 
     @DeleteMapping("/employee/emp-id/{cpf}")
