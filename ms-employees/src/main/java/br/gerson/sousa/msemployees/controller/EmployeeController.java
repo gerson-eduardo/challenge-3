@@ -25,11 +25,13 @@ public class EmployeeController {
     @PostMapping("/employee")
     public ResponseEntity<String > create(@RequestBody SaveEmployeeDto dto){
         int status  = service.create(dto);
+        String message;
         if (status == 409){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Employee already present!");
+            message = "Employee already present!";
         }else{
-            return ResponseEntity.status(HttpStatus.CREATED).body("Employee created!");
+            message = "Employee created!";
         }
+        return ResponseEntity.status(status).body(message);
     }
 
     @GetMapping("/employee")
@@ -62,13 +64,13 @@ public class EmployeeController {
         }
     }
 
-    @DeleteMapping("/employee/emp-id/{cpf}")
+    @DeleteMapping("/employee/{cpf}")
     public ResponseEntity<String> deleteByCpf(@PathVariable String  cpf){
         service.deleteByCpf(cpf);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Employee deleted successfully");
     }
 
-    @DeleteMapping("/employee/emp-id/{id}")
+    @DeleteMapping("/employee/id/{id}")
     public ResponseEntity<String> deleteById(@PathVariable Long id){
         service.deleteById(id);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Employee deleted successfully");
