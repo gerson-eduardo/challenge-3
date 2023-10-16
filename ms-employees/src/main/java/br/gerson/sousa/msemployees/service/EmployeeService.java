@@ -28,10 +28,15 @@ public class EmployeeService {
     }
 
     @Transactional
-    public void save(SaveEmployeeDto dto){
-        Employee emp = dto.toModel();
-        employeeRepository.save(emp);
-        roleRepository.save(new Role(emp, "USER"));
+    public int create(SaveEmployeeDto dto){
+        if(employeeRepository.findByCpf(dto.getCpf()).isPresent()){
+            return 409;
+        }else{
+            Employee emp = dto.toModel();
+            employeeRepository.save(emp);
+            roleRepository.save(new Role(emp, "USER"));
+            return 201;
+        }
     }
 
     public List<FindEmployeeDto> findAll(){
