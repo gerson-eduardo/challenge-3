@@ -23,9 +23,13 @@ public class EmployeeController {
     }
 
     @PostMapping("/employee")
-    public ResponseEntity<String > save(@RequestBody SaveEmployeeDto dto){
-        service.save(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Succes!");
+    public ResponseEntity<String > create(@RequestBody SaveEmployeeDto dto){
+        int status  = service.create(dto);
+        if (status == 409){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Employee already present!");
+        }else{
+            return ResponseEntity.status(HttpStatus.CREATED).body("Employee created!");
+        }
     }
 
     @GetMapping("/employee")
