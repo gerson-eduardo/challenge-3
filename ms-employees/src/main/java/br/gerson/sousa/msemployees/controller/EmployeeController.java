@@ -52,6 +52,16 @@ public class EmployeeController {
         return ResponseEntity.status(HttpStatus.FOUND).body(service.findByEmail(email));
     }
 
+    @PutMapping("/employee")
+    public ResponseEntity<String > update(@RequestBody SaveEmployeeDto dto){
+        int status = service.update(dto);
+        if(status == 204){
+            return ResponseEntity.status(204).body("Employee not found!");
+        }else{
+            return ResponseEntity.status(200).body("Employee updated!");
+        }
+    }
+
     @DeleteMapping("/employee/emp-id/{cpf}")
     public ResponseEntity<String> deleteByCpf(@PathVariable String  cpf){
         service.deleteByCpf(cpf);
