@@ -25,11 +25,13 @@ public class EmployeeController {
     @PostMapping("/employee")
     public ResponseEntity<String > create(@RequestBody SaveEmployeeDto dto){
         int status  = service.create(dto);
+        String message;
         if (status == 409){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Employee already present!");
+            message = "Employee already present!";
         }else{
-            return ResponseEntity.status(HttpStatus.CREATED).body("Employee created!");
+            message = "Employee created!";
         }
+        return ResponseEntity.status(status).body(message);
     }
 
     @GetMapping("/employee")
