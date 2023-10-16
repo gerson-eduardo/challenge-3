@@ -31,6 +31,8 @@ public class RoleController {
             message = "User not found";
         }else if(status == 409) {
             message = "Role already created";
+        }else if(status == 400) {
+            message = "Invalid Request";
         }else {
             message = "Role created successfully";
         }
@@ -49,7 +51,7 @@ public class RoleController {
 
     @GetMapping("/role/employee/{cpf}")
     public ResponseEntity<Role> findByCpf(@PathVariable String cpf){
-        return ResponseEntity.status(HttpStatus.FOUND).body(service.findByEmployee(cpf).get());
+        return ResponseEntity.status(HttpStatus.FOUND).body(service.findByCpf(cpf).get());
     }
 
 
@@ -59,6 +61,8 @@ public class RoleController {
         String message;
         if(status == 404){
             message = "Employee not found";
+        }else if(status == 400) {
+            message = "Invalid request";
         }else {
             message = "Role updated successfully";
         }

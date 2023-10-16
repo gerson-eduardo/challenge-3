@@ -33,6 +33,8 @@ public class RoleService {
             return 404;
         }else if(findByCpf(dto.getCpf()).isPresent()){
             return 409;
+        }else if(!dto.getRole().equals("ADMIN") && !dto.getRole().equals("USER")){
+            return 400;
         }else{
             roleRepository.save(new Role(emp.get(), dto.getRole()));
             return 201;
@@ -62,6 +64,8 @@ public class RoleService {
         Optional<Employee> emp = employeeRepository.findByCpf(dto.getCpf());
         if(emp.isEmpty() || findByCpf(emp.get().getCpf()).isEmpty()){
             return 404;
+        }else if(!dto.getRole().equals("ADMIN") && !dto.getRole().equals("USER")){
+            return 400;
         }else{
             roleRepository.save(new Role(emp.get(), dto.getRole()));
             return 200;
