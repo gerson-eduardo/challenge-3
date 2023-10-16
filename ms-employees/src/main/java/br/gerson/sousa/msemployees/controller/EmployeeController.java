@@ -33,12 +33,12 @@ public class EmployeeController {
         return ResponseEntity.status(HttpStatus.FOUND).body(service.findAll());
     }
 
-    @GetMapping("/employee/emp-id/{id}")
-    public ResponseEntity<FindEmployeeDto> findByCpf(@PathVariable Long id){
+    @GetMapping("/employee/id/{id}")
+    public ResponseEntity<FindEmployeeDto> findByid(@PathVariable Long id){
         return ResponseEntity.status(HttpStatus.FOUND).body(service.findById(id));
     }
 
-    @GetMapping("/employee/id/{cpf}")
+    @GetMapping("/employee/{cpf}")
     public ResponseEntity<FindEmployeeDto> findByCpf(@PathVariable String cpf){
         return ResponseEntity.status(HttpStatus.FOUND).body(service.findByCpf(cpf));
     }
