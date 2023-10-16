@@ -52,6 +52,18 @@ public class RoleController {
         return ResponseEntity.status(HttpStatus.FOUND).body(service.findByEmployee(cpf).get());
     }
 
+
+    @PutMapping("/role")
+    public ResponseEntity<String> update(@RequestBody SaveRoleDto dto){
+        int status = service.update(dto);
+        String message;
+        if(status == 404){
+            message = "Employee not found";
+        }else {
+            message = "Role updated successfully";
+        }
+        return ResponseEntity.status(status).body(message);
+    }
     @DeleteMapping("/role/id/{id}")
     public ResponseEntity<String> deleteById(@PathVariable Long id){
         service.deleteById(id);
