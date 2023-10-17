@@ -46,4 +46,10 @@ public class ProposalController {
         return ResponseEntity.ok().body(service.findByName(name));
     }
 
+    @DeleteMapping("/proposal/id/{id}")
+    public ResponseEntity<String> deleteById(@PathVariable Long id){
+        service.deleteById(id);
+        return ResponseEntity.ok().body("Deleted");
+    }
+
 }
