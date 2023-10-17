@@ -2,18 +2,18 @@ package br.gerson.sousa.msvoting.dto;
 
 import br.gerson.sousa.msvoting.model.Proposal;
 
-public class ProposalDto {
+public class SaveProposalDto {
     private String name;
     private String description;
 
-    public ProposalDto(){}
+    public SaveProposalDto(){}
 
-    public ProposalDto(String name, String description) {
+    public SaveProposalDto(String name, String description) {
         this.name = name;
         this.description = description;
     }
 
-    public ProposalDto(Proposal proposal){
+    public SaveProposalDto(Proposal proposal){
         this.name = proposal.getName();
         this.description = proposal.getDescription();
     }
