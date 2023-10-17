@@ -14,22 +14,25 @@ public class Proposal {
     private String description;
     private String creationDate;
     private String endingDate;
+    private boolean result;
 
     public Proposal() {}
 
-    public Proposal(String name, String description, String creationDate, String endingDate) {
+    public Proposal(String name, String description, String creationDate, String endingDate, boolean result) {
         this.name = name;
         this.description = description;
         this.creationDate = creationDate;
         this.endingDate = endingDate;
+        this.result = result;
     }
 
-    public Proposal(Long id, String name, String description, String creationDate, String endingDate) {
+    public Proposal(Long id, String name, String description, String creationDate, String endingDate, boolean result) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.creationDate = creationDate;
         this.endingDate = endingDate;
+        this.result = result;
     }
 
     public Long getId() {
@@ -70,5 +73,13 @@ public class Proposal {
 
     public void setEndingDate(String endingDate) {
         this.endingDate = endingDate;
+    }
+
+    public boolean isResult() {
+        return result;
+    }
+
+    public void setResult(boolean result) {
+        this.result = result;
     }
 }
