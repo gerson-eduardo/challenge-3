@@ -41,5 +41,9 @@ public class ProposalController {
         return ResponseEntity.ok().body(service.findById(id));
     }
 
+    @GetMapping("/proposal/name/{name}")
+    public ResponseEntity<SaveProposalDto> findByName(@PathVariable String name){
+        return ResponseEntity.ok().body(service.findByName(name));
+    }
 
 }
