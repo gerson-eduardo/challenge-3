@@ -75,7 +75,7 @@ public class RoleController {
     }
 
     @DeleteMapping("/role/{cpf}")
-    public ResponseEntity<String> deleteByEmployee(@PathVariable String cpf){
+    public ResponseEntity<String> deleteByCpf(@PathVariable String cpf){
         service.deleteByCpf(cpf);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Role deleted successfully");
     }
