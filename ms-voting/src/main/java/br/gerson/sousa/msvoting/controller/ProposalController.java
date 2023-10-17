@@ -36,4 +36,10 @@ public class ProposalController {
         return ResponseEntity.ok().body(service.findAllByResult(result));
     }
 
+    @GetMapping("/proposal/id/{id}")
+    public ResponseEntity<SaveProposalDto> findById(@PathVariable long id){
+        return ResponseEntity.ok().body(service.findById(id));
+    }
+
+
 }
