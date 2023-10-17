@@ -31,7 +31,12 @@ public class VoteController {
     }
 
     @GetMapping("/vote/proposal-name/{name}")
-    public ResponseEntity<List<Vote>> findAllByProposal_Name(@@PathVariable String name){
+    public ResponseEntity<List<Vote>> findAllByProposal_Name(@PathVariable String name){
         return ResponseEntity.ok().body(service.findAllByProposal_Name(name));
+    }
+
+    @GetMapping("/vote/proposal-id/{id}")
+    public ResponseEntity<List<Vote>> findAllByProposal_Id(@PathVariable Long id){
+        return ResponseEntity.ok().body(service.findAllByProposal_Id(id));
     }
 }
