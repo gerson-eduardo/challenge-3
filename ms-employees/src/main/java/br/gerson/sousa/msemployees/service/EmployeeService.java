@@ -2,6 +2,7 @@ package br.gerson.sousa.msemployees.service;
 
 import br.gerson.sousa.msemployees.dto.FindEmployeeDto;
 import br.gerson.sousa.msemployees.dto.SaveEmployeeDto;
+import br.gerson.sousa.msemployees.mapper.EmployeeMapper;
 import br.gerson.sousa.msemployees.model.Employee;
 import br.gerson.sousa.msemployees.model.Role;
 import br.gerson.sousa.msemployees.repository.EmployeeRepository;
@@ -20,11 +21,13 @@ public class EmployeeService {
 
     private EmployeeRepository employeeRepository;
     private RoleRepository roleRepository;
+    private EmployeeMapper mapper;
 
     @Autowired
-    public EmployeeService(EmployeeRepository employeeRepository, RoleRepository roleRepository){
+    public EmployeeService(EmployeeRepository employeeRepository, RoleRepository roleRepository, EmployeeMapper mapper){
         this.employeeRepository = employeeRepository;
         this.roleRepository = roleRepository;
+        this.mapper = mapper;
     }
 
     @Transactional
@@ -61,19 +64,22 @@ public class EmployeeService {
 
     @Transactional
     public int update(SaveEmployeeDto dto){
-        if(employeeRepository.findByCpf(dto.getCpf()).isEmpty()){
+        Optional<Employee> emp = employeeRepository.findByCpf(dto.getCpf());
+        if(emp.isEmpty()){
             return 204;
         }else{
-            Employee emp = dto.toModel();
-            employeeRepository.save(emp);
+            mapper.updateEmployeeFromSaveEmployeeDto(dto, emp.get());
+            employeeRepository.save(emp.get());
             return 200;
         }
     }
 
+    @Transactional
     public void deleteById(Long id){
         employeeRepository.deleteById(id);
     }
 
+    @Transactional
     public void deleteByCpf(String cpf){
         employeeRepository.deleteByCpf(cpf);
     }

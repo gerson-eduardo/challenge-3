@@ -55,29 +55,30 @@ public class RoleService {
     }
 
     public Optional<Role> findByCpf(String cpf){
-        Employee emp = employeeRepository.findByCpf(cpf).get();
-        return roleRepository.findByEmployee(emp);
+        return roleRepository.findByEmployee_Cpf(cpf);
     }
 
     @Transactional
     public int update(SaveRoleDto dto){
-        Optional<Employee> emp = employeeRepository.findByCpf(dto.getCpf());
-        if(emp.isEmpty() || findByCpf(emp.get().getCpf()).isEmpty()){
+        Optional<Role> role = roleRepository.findByEmployee_Cpf(dto.getCpf());
+        if(role.isEmpty()){
             return 404;
         }else if(!dto.getRole().equals("ADMIN") && !dto.getRole().equals("USER")){
             return 400;
         }else{
-            roleRepository.save(new Role(emp.get(), dto.getRole()));
+            role.get().setRole(dto.getRole());
+            roleRepository.save(role.get());
             return 200;
         }
     }
 
+    @Transactional
     public void deleteById(Long id){
         roleRepository.deleteById(id);
     }
 
-    public void deleteByEmployee(String cpf){
-        Employee emp = employeeRepository.findByCpf(cpf).get();
-        roleRepository.deleteByEmployee(emp);
+    @Transactional
+    public void deleteByCpf(String cpf){
+        roleRepository.deleteByEmployee_Cpf(cpf);
     }
 }
