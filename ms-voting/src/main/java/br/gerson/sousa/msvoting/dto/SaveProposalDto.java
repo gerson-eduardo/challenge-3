@@ -40,20 +40,4 @@ public class SaveProposalDto {
     public void setDescription(String description) {
         this.description = description;
     }
-
-    public String getCreationDate() {
-        return creationDate;
-    }
-
-    public void setCreationDate(String creationDate) {
-        this.creationDate = creationDate;
-    }
-
-    public String getEndingDate() {
-        return endingDate;
-    }
-
-    public void setEndingDate(String endingDate) {
-        this.endingDate = endingDate;
-    }
 }
