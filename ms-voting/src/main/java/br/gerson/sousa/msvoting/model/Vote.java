@@ -9,22 +9,21 @@ public class Vote {
     private Long id;
     @ManyToOne
     private Proposal proposal;
-    @ManyToOne
-    private Employee employee;
+    private String cpf;
     private boolean vote;
 
     public Vote() {}
 
-    public Vote(Proposal proposal, Employee employee, boolean vote) {
+    public Vote(Proposal proposal, String cpf, boolean vote) {
         this.proposal = proposal;
-        this.employee = employee;
+        this.cpf = cpf;
         this.vote = vote;
     }
 
-    public Vote(Long id, Proposal proposal, Employee employee, boolean vote) {
+    public Vote(Long id, Proposal proposal, String cpf, boolean vote) {
         this.id = id;
         this.proposal = proposal;
-        this.employee = employee;
+        this.cpf = cpf;
         this.vote = vote;
     }
 
@@ -44,12 +43,12 @@ public class Vote {
         this.proposal = proposal;
     }
 
-    public Employee getEmployee() {
-        return employee;
+    public String getCpf() {
+        return cpf;
     }
 
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
 
     public boolean isVote() {
