@@ -6,6 +6,8 @@ import br.gerson.sousa.msvoting.repository.ProposalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +22,10 @@ public class ProposalService {
     }
 
     public void save(SaveProposalDto dto){
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        Proposal proposal = dto.toModel();
+        proposal.setCreationDate(now.format(formatter));
         repository.save(dto.toModel());
     }
 
@@ -30,12 +36,19 @@ public class ProposalService {
         }
         return dtos;
     }
+    public List<Proposal> findAllByResult(){
+        return repository.findAllByResult(true);
+    }
 
     public SaveProposalDto findById(Long id){
         return new SaveProposalDto(repository.findById(id).get());
+    }
+    public SaveProposalDto findByName(String name){
+        return new SaveProposalDto(repository.findByName(name).get());
     }
 
     public void deleteById(Long id){
         repository.deleteById(id);
     }
+    public void deleteByName(String name){repository.deleteByName(name);}
 }
