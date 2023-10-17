@@ -12,6 +12,9 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
     Vote save(Vote vote);
 
     List<Vote> findAll();
+    List<Vote> findAllByProposal_Name(String name);
+    List<Vote> findAllByProposal_Id(Long id);
+    List<Vote> findAllByCpf(String cpf);
 
     Optional<Vote> findById(Long id);
 
