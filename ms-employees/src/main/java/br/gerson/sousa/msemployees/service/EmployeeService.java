@@ -74,10 +74,12 @@ public class EmployeeService {
         }
     }
 
+    @Transactional
     public void deleteById(Long id){
         employeeRepository.deleteById(id);
     }
 
+    @Transactional
     public void deleteByCpf(String cpf){
         employeeRepository.deleteByCpf(cpf);
     }
