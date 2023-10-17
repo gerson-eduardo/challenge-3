@@ -5,32 +5,24 @@ import br.gerson.sousa.msvoting.model.Proposal;
 public class ProposalDto {
     private String name;
     private String description;
-    private String creationDate;
-    private String endingDate;
 
     public ProposalDto(){}
 
-    public ProposalDto(String name, String description, String creationDate, String endingDate) {
+    public ProposalDto(String name, String description) {
         this.name = name;
         this.description = description;
-        this.creationDate = creationDate;
-        this.endingDate = endingDate;
     }
 
     public ProposalDto(Proposal proposal){
         this.name = proposal.getName();
         this.description = proposal.getDescription();
-        this.creationDate = proposal.getCreationDate();
-        this.endingDate = proposal.getEndingDate();
     }
 
     public Proposal toModel(){
-        return new Proposal(
-                name,
-                description,
-                creationDate,
-                endingDate
-        );
+        Proposal proposal = new Proposal();
+        proposal.setName(this.name);
+        proposal.setDescription(this.description);
+        return proposal;
     }
 
     public String getName() {
