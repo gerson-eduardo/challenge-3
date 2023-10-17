@@ -36,8 +36,8 @@ public class ProposalService {
         }
         return dtos;
     }
-    public List<Proposal> findAllByResult(){
-        return repository.findAllByResult(true);
+    public List<Proposal> findAllByResult(boolean result){
+        return repository.findAllByResult(result);
     }
 
     public SaveProposalDto findById(Long id){
