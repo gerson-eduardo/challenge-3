@@ -31,5 +31,9 @@ public class ProposalController {
         return ResponseEntity.ok().body(service.findALl());
     }
 
+    @GetMapping("/proposal/result/{result}")
+    public ResponseEntity<List<Proposal>> findAllByResult(@PathVariable boolean result){
+        return ResponseEntity.ok().body(service.findAllByResult(result));
+    }
 
 }
