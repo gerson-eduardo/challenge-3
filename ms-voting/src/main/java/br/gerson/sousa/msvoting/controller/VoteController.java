@@ -1,6 +1,6 @@
 package br.gerson.sousa.msvoting.controller;
 
-import br.gerson.sousa.msvoting.dto.SaveVoteDto;
+import br.gerson.sousa.msvoting.dto.VoteDto;
 import br.gerson.sousa.msvoting.model.Vote;
 import br.gerson.sousa.msvoting.service.VoteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class VoteController {
     }
 
     @PostMapping("/vote")
-    public ResponseEntity<String> create(@RequestBody SaveVoteDto dto){
+    public ResponseEntity<String> create(@RequestBody VoteDto dto){
         service.save(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body("Created");
     }

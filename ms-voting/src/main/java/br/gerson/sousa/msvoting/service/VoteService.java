@@ -1,6 +1,6 @@
 package br.gerson.sousa.msvoting.service;
 
-import br.gerson.sousa.msvoting.dto.SaveVoteDto;
+import br.gerson.sousa.msvoting.dto.VoteDto;
 import br.gerson.sousa.msvoting.model.DateFormatter;
 import br.gerson.sousa.msvoting.model.Proposal;
 import br.gerson.sousa.msvoting.model.Vote;
@@ -11,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,7 +27,7 @@ public class VoteService {
     }
 
     @Transactional
-    public void save(SaveVoteDto dto){
+    public void save(VoteDto dto){
         Optional<Proposal> proposal = proposalRepository.findByName(dto.getName());
         LocalDateTime now = LocalDateTime.now();
         if(now.isBefore(formatter.stringToDate(proposal.get().getEndingDate()))){

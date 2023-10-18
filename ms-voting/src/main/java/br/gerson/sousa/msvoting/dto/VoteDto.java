@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class SaveVoteDto {
+public class VoteDto {
     private String name;
     private String cpf;
     private boolean approved;
