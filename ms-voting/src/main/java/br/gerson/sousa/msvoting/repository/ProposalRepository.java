@@ -13,7 +13,7 @@ public interface ProposalRepository extends JpaRepository<Proposal, Long> {
     Proposal save(Proposal proposal);
 
     List<Proposal> findAll();
-    List<Proposal> findAllByResult(boolean result);
+    List<Proposal> findAllByApproved(boolean result);
 
     Optional<Proposal> findById(Long id);
     Optional<Proposal> findByName(String name);
