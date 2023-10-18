@@ -40,6 +40,14 @@ public class ProposalService {
         proposal.setEndingDate(formatter.dateToString(endingTime));
         proposalRepository.save(proposal);
     }
+    public void endPoll(String proposalName, String cpf){
+        Proposal proposal = proposalRepository.findByName(proposalName).get();
+        if(proposal.getApproved() != null){
+            boolean approved = countVotes(proposal);
+            proposal.setApproved(approved);
+            proposalRepository.save(proposal);
+        }
+    }
 
 
     @Transactional
