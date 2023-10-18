@@ -43,12 +43,18 @@ public class VoteService {
         }return dtos;
     }
 
-    public List<Vote> findAllByProposal_Name(String name){
-        return voteRepository.findAllByProposal_Name(name);
+    public List<VoteDto> findAllByProposal_Name(String name){
+        List<VoteDto> dtos = new ArrayList();
+        for(Vote vote: voteRepository.findAllByProposal_Name(name)){
+            dtos.add(new VoteDto(vote));
+        }return dtos;
     }
 
-    public List<Vote> findAllByProposal_Id(Long id){
-        return voteRepository.findAllByProposal_Id(id);
+    public List<VoteDto> findAllByProposal_Id(Long id){
+        List<VoteDto> dtos = new ArrayList();
+        for(Vote vote: voteRepository.findAllByProposal_Id(id)){
+            dtos.add(new VoteDto(vote));
+        }return dtos;
     }
 
     public List<Vote> findAllByCpf(String cpf){
