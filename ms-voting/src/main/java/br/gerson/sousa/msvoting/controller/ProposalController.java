@@ -1,5 +1,6 @@
 package br.gerson.sousa.msvoting.controller;
 
+import br.gerson.sousa.msvoting.dto.FindProposalDto;
 import br.gerson.sousa.msvoting.dto.SaveProposalDto;
 import br.gerson.sousa.msvoting.model.Proposal;
 import br.gerson.sousa.msvoting.service.ProposalService;
@@ -40,22 +41,22 @@ public class ProposalController {
     }
 
     @GetMapping("/proposal")
-    public ResponseEntity<List<SaveProposalDto>> findAll(){
+    public ResponseEntity<List<FindProposalDto>> findAll(){
         return ResponseEntity.ok().body(service.findALl());
     }
 
     @GetMapping("/proposal/result/{result}")
-    public ResponseEntity<List<Proposal>> findAllByResult(@PathVariable boolean result){
+    public ResponseEntity<List<FindProposalDto>> findAllByResult(@PathVariable boolean result){
         return ResponseEntity.ok().body(service.findAllByResult(result));
     }
 
     @GetMapping("/proposal/id/{id}")
-    public ResponseEntity<SaveProposalDto> findById(@PathVariable long id){
+    public ResponseEntity<FindProposalDto> findById(@PathVariable long id){
         return ResponseEntity.ok().body(service.findById(id));
     }
 
     @GetMapping("/proposal/name/{name}")
-    public ResponseEntity<SaveProposalDto> findByName(@PathVariable String name){
+    public ResponseEntity<FindProposalDto> findByName(@PathVariable String name){
         return ResponseEntity.ok().body(service.findByName(name));
     }
 
