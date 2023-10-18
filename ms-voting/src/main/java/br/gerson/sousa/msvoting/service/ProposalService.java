@@ -37,7 +37,6 @@ public class ProposalService {
         if(duration == null){
             duration = Duration.ofMinutes(1);
         }
-
         LocalDateTime endingTime = LocalDateTime.now().plus(duration);
         proposal.setEndingDate(formatter.dateToString(endingTime));
         proposalRepository.save(proposal);
@@ -46,11 +45,10 @@ public class ProposalService {
     @Transactional
     public void endPoll(String proposalName, String cpf){
         Proposal proposal = proposalRepository.findByName(proposalName).get();
-        if(proposal.getApproved() != null){
             boolean approved = countVotes(proposal);
             proposal.setApproved(approved);
             proposalRepository.save(proposal);
-        }
+
     }
 
 
@@ -91,7 +89,13 @@ public class ProposalService {
 
     boolean countVotes(Proposal proposal){
         List<Vote> votes = voteRepository.findAllByProposal_Name(proposal.getName());
-        int result = Collections.frequency(votes, true) - Collections.frequency(votes, false);
+        int yes = 0;
+        int no  = 0;
+        for(Vote vote : votes){
+            if(vote.isApproved() == true){yes++;}
+            else{no++;}
+        }
+        int result =  yes - no;
         if(result > 0){
             return true;
         }else {
