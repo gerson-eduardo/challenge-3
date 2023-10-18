@@ -32,17 +32,17 @@ public class VoteController {
     }
 
     @GetMapping("/vote/proposal-name/{name}")
-    public ResponseEntity<List<Vote>> findAllByProposal_Name(@PathVariable String name){
+    public ResponseEntity<List<VoteDto>> findAllByProposal_Name(@PathVariable String name){
         return ResponseEntity.ok().body(service.findAllByProposal_Name(name));
     }
 
     @GetMapping("/vote/proposal-id/{id}")
-    public ResponseEntity<List<Vote>> findAllByProposal_Id(@PathVariable Long id){
+    public ResponseEntity<List<VoteDto>> findAllByProposal_Id(@PathVariable Long id){
         return ResponseEntity.ok().body(service.findAllByProposal_Id(id));
     }
 
     @GetMapping("/vote/employee/{cpf}")
-    public ResponseEntity<List<Vote>> findAllByCpf(@PathVariable String cpf){
+    public ResponseEntity<List<VoteDto>> findAllByCpf(@PathVariable String cpf){
         return ResponseEntity.ok().body(service.findAllByCpf(cpf));
     }
     @DeleteMapping("/vote/id/{id}")
