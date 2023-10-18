@@ -19,4 +19,5 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
     Optional<Vote> findById(Long id);
 
     void deleteById(Long id);
+    void deleteAllByCpf(String cpf);
 }
