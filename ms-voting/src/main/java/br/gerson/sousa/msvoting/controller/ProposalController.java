@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Duration;
 import java.util.List;
 
 @RestController
@@ -18,6 +19,18 @@ public class ProposalController {
     @Autowired
     public ProposalController(ProposalService service){
         this.service = service;
+    }
+
+    @PostMapping("/proposal/name/{name}/start-poll")
+    public ResponseEntity<String > startPoll(@PathVariable String name, @RequestParam String cpf, @RequestParam(required = false)Duration duration){
+        service.startPoll(name, cpf, duration);
+        return ResponseEntity.ok().body("DDD");
+    }
+
+    @PostMapping("/proposal/name/{name}/end-poll")
+    public ResponseEntity<String > endPoll(@PathVariable String name, @RequestParam String cpf){
+        service.endPoll(name, cpf);
+        return ResponseEntity.ok().body("DDD");
     }
 
     @PostMapping("/proposal")
@@ -52,8 +65,8 @@ public class ProposalController {
         return ResponseEntity.ok().body("Deleted");
     }
 
-    @GetMapping("/proposal/name/{name}")
-    public ResponseEntity<String> findById(@PathVariable String name){
+    @DeleteMapping("/proposal/name/{name}")
+    public ResponseEntity<String> deleteById(@PathVariable String name){
         service.deleteByName(name);
         return ResponseEntity.ok().body("Deleted");
     }
