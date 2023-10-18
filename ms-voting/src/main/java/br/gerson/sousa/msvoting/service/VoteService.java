@@ -57,8 +57,11 @@ public class VoteService {
         }return dtos;
     }
 
-    public List<Vote> findAllByCpf(String cpf){
-        return voteRepository.findAllByCpf(cpf);
+    public List<VoteDto> findAllByCpf(String cpf){
+        List<VoteDto> dtos = new ArrayList();
+        for(Vote vote: voteRepository.findAllByCpf(cpf)){
+            dtos.add(new VoteDto(vote));
+        }return dtos;
     }
 
     @Transactional
