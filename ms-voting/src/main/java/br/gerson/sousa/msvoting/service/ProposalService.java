@@ -1,5 +1,6 @@
 package br.gerson.sousa.msvoting.service;
 
+import br.gerson.sousa.msvoting.dto.FindProposalDto;
 import br.gerson.sousa.msvoting.dto.SaveProposalDto;
 import br.gerson.sousa.msvoting.model.DateFormatter;
 import br.gerson.sousa.msvoting.model.Proposal;
@@ -61,22 +62,24 @@ public class ProposalService {
         proposalRepository.save(proposal);
     }
 
-    public List<SaveProposalDto> findALl(){
-        List<SaveProposalDto> dtos = new ArrayList<>();
+    public List<FindProposalDto> findALl(){
+        List<FindProposalDto> dtos = new ArrayList<>();
         for(Proposal proposal: proposalRepository.findAll()){
-            dtos.add(new SaveProposalDto(proposal));
-        }
-        return dtos;
+            dtos.add(new FindProposalDto(proposal));
+        }return dtos;
     }
-    public List<Proposal> findAllByResult(boolean result){
-        return proposalRepository.findAllByApproved(result);
+    public List<FindProposalDto> findAllByResult(boolean result){
+        List<FindProposalDto> dtos = new ArrayList<>();
+        for(Proposal proposal: proposalRepository.findAllByApproved(result)){
+            dtos.add(new FindProposalDto(proposal));
+        }return dtos;
     }
 
-    public SaveProposalDto findById(Long id){
-        return new SaveProposalDto(proposalRepository.findById(id).get());
+    public FindProposalDto findById(Long id){
+        return new FindProposalDto(proposalRepository.findById(id).get());
     }
-    public SaveProposalDto findByName(String name){
-        return new SaveProposalDto(proposalRepository.findByName(name).get());
+    public FindProposalDto findByName(String name){
+        return new FindProposalDto(proposalRepository.findByName(name).get());
     }
 
     @Transactional

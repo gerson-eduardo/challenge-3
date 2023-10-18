@@ -1,6 +1,6 @@
 package br.gerson.sousa.msvoting.service;
 
-import br.gerson.sousa.msvoting.dto.SaveVoteDto;
+import br.gerson.sousa.msvoting.dto.VoteDto;
 import br.gerson.sousa.msvoting.model.DateFormatter;
 import br.gerson.sousa.msvoting.model.Proposal;
 import br.gerson.sousa.msvoting.model.Vote;
@@ -11,8 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,7 +28,7 @@ public class VoteService {
     }
 
     @Transactional
-    public void save(SaveVoteDto dto){
+    public void save(VoteDto dto){
         Optional<Proposal> proposal = proposalRepository.findByName(dto.getName());
         LocalDateTime now = LocalDateTime.now();
         if(now.isBefore(formatter.stringToDate(proposal.get().getEndingDate()))){
@@ -37,20 +36,32 @@ public class VoteService {
         }
     }
 
-    public List<Vote> findAll(){
-        return voteRepository.findAll();
+    public List<VoteDto> findAll(){
+        List<VoteDto> dtos = new ArrayList();
+        for(Vote vote: voteRepository.findAll()){
+            dtos.add(new VoteDto(vote));
+        }return dtos;
     }
 
-    public List<Vote> findAllByProposal_Name(String name){
-        return voteRepository.findAllByProposal_Name(name);
+    public List<VoteDto> findAllByProposal_Name(String name){
+        List<VoteDto> dtos = new ArrayList();
+        for(Vote vote: voteRepository.findAllByProposal_Name(name)){
+            dtos.add(new VoteDto(vote));
+        }return dtos;
     }
 
-    public List<Vote> findAllByProposal_Id(Long id){
-        return voteRepository.findAllByProposal_Id(id);
+    public List<VoteDto> findAllByProposal_Id(Long id){
+        List<VoteDto> dtos = new ArrayList();
+        for(Vote vote: voteRepository.findAllByProposal_Id(id)){
+            dtos.add(new VoteDto(vote));
+        }return dtos;
     }
 
-    public List<Vote> findAllByCpf(String cpf){
-        return voteRepository.findAllByCpf(cpf);
+    public List<VoteDto> findAllByCpf(String cpf){
+        List<VoteDto> dtos = new ArrayList();
+        for(Vote vote: voteRepository.findAllByCpf(cpf)){
+            dtos.add(new VoteDto(vote));
+        }return dtos;
     }
 
     @Transactional
