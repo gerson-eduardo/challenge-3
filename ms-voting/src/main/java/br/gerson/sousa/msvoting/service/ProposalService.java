@@ -30,6 +30,7 @@ public class ProposalService {
         this.voteRepository = voteRepository;
     }
 
+    @Transactional
     public void startPoll(String proposalName, String cpf, Duration duration){
         Proposal proposal = proposalRepository.findByName(proposalName).get();
         if(duration == null){
@@ -40,6 +41,8 @@ public class ProposalService {
         proposal.setEndingDate(formatter.dateToString(endingTime));
         proposalRepository.save(proposal);
     }
+
+    @Transactional
     public void endPoll(String proposalName, String cpf){
         Proposal proposal = proposalRepository.findByName(proposalName).get();
         if(proposal.getApproved() != null){

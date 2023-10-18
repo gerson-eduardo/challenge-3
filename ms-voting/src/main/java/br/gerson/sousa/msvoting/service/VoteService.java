@@ -6,6 +6,7 @@ import br.gerson.sousa.msvoting.model.Proposal;
 import br.gerson.sousa.msvoting.model.Vote;
 import br.gerson.sousa.msvoting.repository.ProposalRepository;
 import br.gerson.sousa.msvoting.repository.VoteRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,7 @@ public class VoteService {
         this.proposalRepository = proposalRepository;
     }
 
+    @Transactional
     public void save(SaveVoteDto dto){
         Optional<Proposal> proposal = proposalRepository.findByName(dto.getName());
         LocalDateTime now = LocalDateTime.now();
@@ -51,8 +53,10 @@ public class VoteService {
         return voteRepository.findAllByCpf(cpf);
     }
 
+    @Transactional
     public void deleteById(Long id){voteRepository.deleteById(id);}
 
+    @Transactional
     public void deleteAllByCpf(String cpf){voteRepository.deleteAllByCpf(cpf);}
 
 }
