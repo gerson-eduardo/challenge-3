@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 public class SaveVoteDto {
     private String name;
     private String cpf;
-    private boolean vote;
+    private boolean approved;
 }
