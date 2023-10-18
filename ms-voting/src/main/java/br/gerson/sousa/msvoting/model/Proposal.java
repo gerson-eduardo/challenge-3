@@ -20,13 +20,10 @@ public class Proposal {
     private String description;
     private String creationDate;
     private String endingDate;
-    private boolean result;
+    private Boolean approved;
 
-    public Proposal(String name, String description, String creationDate, String endingDate, boolean result) {
+    public Proposal(String name, String description){
         this.name = name;
         this.description = description;
-        this.creationDate = creationDate;
-        this.endingDate = endingDate;
-        this.result = result;
     }
 }
