@@ -27,7 +27,7 @@ public class VoteController {
     }
 
     @GetMapping("/vote")
-    public ResponseEntity<List<Vote>> findAll(){
+    public ResponseEntity<List<VoteDto>> findAll(){
         return ResponseEntity.ok().body(service.findAll());
     }
 
