@@ -18,9 +18,6 @@ public class SaveProposalDto {
     }
 
     public Proposal toModel(){
-        Proposal proposal = new Proposal();
-        proposal.setName(this.name);
-        proposal.setDescription(this.description);
-        return proposal;
+        return new Proposal(this.name, this.description);
     }
 }
