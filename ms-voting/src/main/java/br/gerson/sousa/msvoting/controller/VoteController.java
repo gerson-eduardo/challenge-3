@@ -1,5 +1,6 @@
 package br.gerson.sousa.msvoting.controller;
 
+import br.gerson.sousa.msvoting.dto.SaveVoteDto;
 import br.gerson.sousa.msvoting.model.Vote;
 import br.gerson.sousa.msvoting.service.VoteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,8 @@ public class VoteController {
     }
 
     @PostMapping("/vote")
-    public ResponseEntity<String> create(@RequestBody Vote vote){
-        service.save(vote);
+    public ResponseEntity<String> create(@RequestBody SaveVoteDto dto){
+        service.save(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body("Created");
     }
 
@@ -43,5 +44,14 @@ public class VoteController {
     @GetMapping("/vote/employee/{cpf}")
     public ResponseEntity<List<Vote>> findAllByCpf(@PathVariable String cpf){
         return ResponseEntity.ok().body(service.findAllByCpf(cpf));
+    }
+    @DeleteMapping("/vote/id/{id}")
+    public void deleteById(@PathVariable Long id){
+        service.deleteById(id);
+    }
+
+    @DeleteMapping("/vote/employee/{cpf}")
+    public void deleteAllByCpf(@PathVariable String cpf){
+        service.deleteAllByCpf(cpf);
     }
 }
