@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,8 +36,11 @@ public class VoteService {
         }
     }
 
-    public List<Vote> findAll(){
-        return voteRepository.findAll();
+    public List<VoteDto> findAll(){
+        List<VoteDto> dtos = new ArrayList();
+        for(Vote vote: voteRepository.findAll()){
+            dtos.add(new VoteDto(vote));
+        }return dtos;
     }
 
     public List<Vote> findAllByProposal_Name(String name){
