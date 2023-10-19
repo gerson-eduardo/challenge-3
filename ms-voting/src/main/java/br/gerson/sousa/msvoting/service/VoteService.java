@@ -1,16 +1,16 @@
 package br.gerson.sousa.msvoting.service;
 
-import br.gerson.sousa.msvoting.dto.FindRoleDto;
 import br.gerson.sousa.msvoting.dto.VoteDto;
 import br.gerson.sousa.msvoting.ex.EntityNotFoundException;
 import br.gerson.sousa.msvoting.ex.InvalidRoleException;
 import br.gerson.sousa.msvoting.ex.TimeExceededException;
 import br.gerson.sousa.msvoting.feignCLient.RoleFeignClient;
-import br.gerson.sousa.msvoting.model.DateFormatter;
+import br.gerson.sousa.msvoting.tools.DateFormatter;
 import br.gerson.sousa.msvoting.model.Proposal;
 import br.gerson.sousa.msvoting.model.Vote;
 import br.gerson.sousa.msvoting.repository.ProposalRepository;
 import br.gerson.sousa.msvoting.repository.VoteRepository;
+import br.gerson.sousa.msvoting.tools.RoleValidation;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -27,6 +27,7 @@ public class VoteService {
     private ProposalRepository proposalRepository;
     private RoleFeignClient feignClient;
     private DateFormatter formatter = new DateFormatter();
+    private RoleValidation validation = new RoleValidation();
 
     @Autowired
     public VoteService(VoteRepository voteRepository, ProposalRepository proposalRepository, RoleFeignClient feignClient){
@@ -38,17 +39,15 @@ public class VoteService {
     @Transactional
     public void save(VoteDto dto){
         Optional<Proposal> proposal = proposalRepository.findByName(dto.getName());
-        boolean validEmployee = validateEmployee(dto.getCpf());
+        Boolean validEmployee = validation.validateEmployee(feignClient.findByCpf(dto.getCpf()));
+        LocalDateTime now = LocalDateTime.now();
         if(proposal.isEmpty()){
             throw new EntityNotFoundException("Proposal with name " + dto.getName() + " not found!");
-        }
-        LocalDateTime now = LocalDateTime.now();
-        if(now.isAfter(formatter.stringToDate(proposal.get().getEndingDate()))){
+        }else if(now.isAfter(formatter.stringToDate(proposal.get().getEndingDate()))){
             throw new TimeExceededException("Poll is closed!");
-        }else if (!validEmployee){
+        }else if (validEmployee == null){
             throw new InvalidRoleException("Role with cpf " + dto.getCpf() + " not found!");
-        }
-        else{
+        }else{
             voteRepository.save(new Vote(proposal.get(), dto.getCpf(), dto.isApproved()));
         }
     }
@@ -97,9 +96,5 @@ public class VoteService {
         } catch (EmptyResultDataAccessException e) {
             throw new EntityNotFoundException("Vote with cpf " + cpf + " not found!");
         }
-    }
-    private boolean validateEmployee(String cpf) {
-        FindRoleDto dto = feignClient.findByCpf(cpf);
-        return (dto.getRole().equals("ADMIN") || dto.getRole().equals("USER"));
     }
 }
