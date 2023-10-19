@@ -16,9 +16,9 @@ public class Vote {
     @ManyToOne
     private Proposal proposal;
     private String cpf;
-    private boolean approved;
+    private Boolean approved;
 
-    public Vote(Proposal proposal, String cpf, boolean approved) {
+    public Vote(Proposal proposal, String cpf, Boolean approved) {
         this.proposal = proposal;
         this.cpf = cpf;
         this.approved = approved;
