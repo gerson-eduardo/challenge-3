@@ -1,6 +1,8 @@
 package br.gerson.sousa.msvoting.controller;
 
 import br.gerson.sousa.msvoting.dto.VoteDto;
+import br.gerson.sousa.msvoting.ex.EntityNotFoundException;
+import br.gerson.sousa.msvoting.ex.TimeExceededException;
 import br.gerson.sousa.msvoting.model.Vote;
 import br.gerson.sousa.msvoting.service.VoteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +24,15 @@ public class VoteController {
 
     @PostMapping("/vote")
     public ResponseEntity<String> create(@RequestBody VoteDto dto){
-        service.save(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Created");
+        try {
+            service.save(dto);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Vote saved");
+        }catch (EntityNotFoundException e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }catch (TimeExceededException e){
+            return new ResponseEntity<>(HttpStatus.REQUEST_TIMEOUT);
+        }
+
     }
 
     @GetMapping("/vote")
@@ -46,12 +55,22 @@ public class VoteController {
         return ResponseEntity.ok().body(service.findAllByCpf(cpf));
     }
     @DeleteMapping("/vote/id/{id}")
-    public void deleteById(@PathVariable Long id){
-        service.deleteById(id);
+    public ResponseEntity<String> deleteById(@PathVariable Long id){
+        try {
+            service.deleteById(id);
+            return ResponseEntity.ok().body("Vote deleted");
+        }catch (EntityNotFoundException e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @DeleteMapping("/vote/employee/{cpf}")
-    public void deleteAllByCpf(@PathVariable String cpf){
-        service.deleteAllByCpf(cpf);
+    public ResponseEntity<String> deleteAllByCpf(@PathVariable String cpf){
+        try {
+            service.deleteAllByCpf(cpf);
+            return ResponseEntity.ok().body("All votes deleted");
+        }catch (EntityNotFoundException e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }
