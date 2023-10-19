@@ -71,16 +71,15 @@ public class RoleService {
     }
 
     @Transactional
-    public int update(SaveRoleDto dto){
+    public void update(SaveRoleDto dto){
         Optional<Role> role = roleRepository.findByEmployee_Cpf(dto.getCpf());
         if(role.isEmpty()){
-            return 404;
+            throw new EntityNotFoundException("Role with cpf " + "not found!");
         }else if(!dto.getRole().equals("ADMIN") && !dto.getRole().equals("USER")){
-            return 400;
+            throw new InvalidRoleException("Invalid role found in request. ROLE: " + dto.getRole());
         }else{
             role.get().setRole(dto.getRole());
             roleRepository.save(role.get());
-            return 200;
         }
     }
 
