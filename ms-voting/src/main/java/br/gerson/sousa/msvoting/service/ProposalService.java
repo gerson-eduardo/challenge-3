@@ -2,6 +2,7 @@ package br.gerson.sousa.msvoting.service;
 
 import br.gerson.sousa.msvoting.dto.FindProposalDto;
 import br.gerson.sousa.msvoting.dto.SaveProposalDto;
+import br.gerson.sousa.msvoting.ex.EntityConflictException;
 import br.gerson.sousa.msvoting.ex.EntityNotFoundException;
 import br.gerson.sousa.msvoting.model.DateFormatter;
 import br.gerson.sousa.msvoting.model.Proposal;
@@ -62,10 +63,14 @@ public class ProposalService {
 
     @Transactional
     public void save(SaveProposalDto dto){
-        LocalDateTime now = LocalDateTime.now();
-        Proposal proposal = dto.toModel();
-        proposal.setCreationDate(formatter.dateToString(now));
-        proposalRepository.save(proposal);
+        if(proposalRepository.findByName(dto.getName()).isPresent()){
+            throw new EntityConflictException("Proposal already exists!");
+        }else{
+            LocalDateTime now = LocalDateTime.now();
+            Proposal proposal = dto.toModel();
+            proposal.setCreationDate(formatter.dateToString(now));
+            proposalRepository.save(proposal);
+        }
     }
 
     public List<FindProposalDto> findALl(){
