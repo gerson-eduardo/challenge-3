@@ -11,6 +11,7 @@ import br.gerson.sousa.msemployees.repository.RoleRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -92,11 +93,19 @@ public class EmployeeService {
 
     @Transactional
     public void deleteById(Long id){
-        employeeRepository.deleteById(id);
+        try {
+            employeeRepository.deleteById(id);
+        }catch(EmptyResultDataAccessException e){
+            throw new EntityNotFoundException("Employee with id " + id + " not found!");
+        }
     }
 
     @Transactional
     public void deleteByCpf(String cpf){
-        employeeRepository.deleteByCpf(cpf);
+        try {
+            employeeRepository.deleteByCpf(cpf);
+        }catch(EmptyResultDataAccessException e){
+            throw new EntityNotFoundException("Employee with cpf " + cpf + " not found!");
+        }
     }
 }
