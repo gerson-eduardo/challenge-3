@@ -3,6 +3,7 @@ package br.gerson.sousa.msvoting.service;
 import br.gerson.sousa.msvoting.dto.RoleDto;
 import br.gerson.sousa.msvoting.dto.VoteDto;
 import br.gerson.sousa.msvoting.ex.EntityNotFoundException;
+import br.gerson.sousa.msvoting.ex.TimeExceededException;
 import br.gerson.sousa.msvoting.feignCLient.RoleFeignClient;
 import br.gerson.sousa.msvoting.model.DateFormatter;
 import br.gerson.sousa.msvoting.model.Proposal;
@@ -38,8 +39,13 @@ public class VoteService {
     public void save(VoteDto dto){
         validadeUser(dto.getCpf());
         Optional<Proposal> proposal = proposalRepository.findByName(dto.getName());
+        if(proposal.isEmpty()){
+            throw new EntityNotFoundException("Proposal with name " + dto.getName() + " not found!");
+        }
         LocalDateTime now = LocalDateTime.now();
-        if(now.isBefore(formatter.stringToDate(proposal.get().getEndingDate()))){
+        if(now.isAfter(formatter.stringToDate(proposal.get().getEndingDate()))){
+            throw new TimeExceededException("Poll is closed!");
+        }else{
             voteRepository.save(new Vote(proposal.get(), dto.getCpf(), dto.isApproved()));
         }
     }
@@ -89,5 +95,10 @@ public class VoteService {
             throw new EntityNotFoundException("Vote with cpf " + cpf + " not found!");
         }
     }
-
+    private void validadeUser(String cpf){
+        System.out.println("TESTING");
+        ResponseEntity<RoleDto> dto = feignClient.findByCpf(cpf);
+        RoleDto ndto = dto.getBody();
+        System.out.println(ndto.getName());
+    }
 }
