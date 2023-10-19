@@ -58,16 +58,14 @@ public class RoleController {
 
     @PutMapping("/role")
     public ResponseEntity<String> update(@RequestBody SaveRoleDto dto){
-        int status = service.update(dto);
-        String message;
-        if(status == 404){
-            message = "Employee not found";
-        }else if(status == 400) {
-            message = "Invalid request";
-        }else {
-            message = "Role updated successfully";
+        try {
+            service.update(dto);
+            return ResponseEntity.status(HttpStatus.OK).body("Role updated successfully!");
+        }catch(EntityNotFoundException e){
+            return ResponseEntity.status(404).body("Role not found");
+        }catch(InvalidRoleException e){
+            return ResponseEntity.status(400).body("Invalid ROLE type in request");
         }
-        return ResponseEntity.status(status).body(message);
     }
     @DeleteMapping("/role/id/{id}")
     public ResponseEntity<String> deleteById(@PathVariable Long id){
