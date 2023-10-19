@@ -44,6 +44,8 @@ public class ProposalController {
             return ResponseEntity.ok().body(message);
         }catch (EntityNotFoundException e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }catch (InvalidRoleException e){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
 
