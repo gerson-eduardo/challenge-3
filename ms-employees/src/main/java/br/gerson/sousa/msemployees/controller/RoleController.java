@@ -2,6 +2,9 @@ package br.gerson.sousa.msemployees.controller;
 
 import br.gerson.sousa.msemployees.dto.FindRoleDto;
 import br.gerson.sousa.msemployees.dto.SaveRoleDto;
+import br.gerson.sousa.msemployees.ex.EntityConflictException;
+import br.gerson.sousa.msemployees.ex.EntityNotFoundException;
+import br.gerson.sousa.msemployees.ex.InvalidRoleException;
 import br.gerson.sousa.msemployees.model.Role;
 import br.gerson.sousa.msemployees.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,18 +28,16 @@ public class RoleController {
 
     @PostMapping("/role")
     public ResponseEntity<String> create(@RequestBody SaveRoleDto dto){
-        int status = service.create(dto);
-        String message;
-        if(status == 404){
-            message = "User not found";
-        }else if(status == 409) {
-            message = "Role already created";
-        }else if(status == 400) {
-            message = "Invalid Request";
-        }else {
-            message = "Role created successfully";
+        try {
+            service.create(dto);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Role created successfully!");
+        }catch(EntityNotFoundException e){
+            return ResponseEntity.status(404).body("User not found");
+        }catch(EntityConflictException e){
+            return ResponseEntity.status(409).body("Role already created");
+        }catch(InvalidRoleException e){
+            return ResponseEntity.status(400).body("Invalid Request");
         }
-        return ResponseEntity.status(status).body(message);
     }
 
     @GetMapping("/role")
@@ -45,13 +46,13 @@ public class RoleController {
     }
 
     @GetMapping("/role/id/{id}")
-    public ResponseEntity<Role> findById(@PathVariable Long id){
-        return ResponseEntity.status(HttpStatus.FOUND).body(service.findById(id).get());
+    public ResponseEntity<FindRoleDto> findById(@PathVariable Long id){
+        return ResponseEntity.status(HttpStatus.FOUND).body(service.findById(id));
     }
 
     @GetMapping("/role/employee/{cpf}")
-    public ResponseEntity<Role> findByCpf(@PathVariable String cpf){
-        return ResponseEntity.status(HttpStatus.FOUND).body(service.findByCpf(cpf).get());
+    public ResponseEntity<FindRoleDto> findByCpf(@PathVariable String cpf){
+        return ResponseEntity.status(HttpStatus.FOUND).body(service.findByCpf(cpf));
     }
 
 
