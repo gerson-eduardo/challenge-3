@@ -72,4 +72,36 @@ public class EmployeeRepositoryTest {
         assertEquals(EMPLOYEE.getEmail(), newEmployee.get().getEmail());
     }
 
+    @Test
+    public void deleteById(){
+        when(repository.findById(1L)).thenReturn(Optional.of(EMPLOYEE));
+
+        Optional<Employee> emp = repository.findById(1L);
+        assertEquals(EMPLOYEE, emp.get());
+
+        when(repository.findById(1L)).thenReturn(Optional.empty());
+
+        repository.deleteById(1L);
+        Optional<Employee> new_emp = repository.findById(1L);
+
+        verify(repository, atLeast(2)).findById(1L);
+        verify(repository, atLeast(1)).deleteById(1L);
+        assertTrue(new_emp.isEmpty());
+    }
+
+    @Test
+    public void deleteByCpf(){
+        when(repository.findByCpf("25369242038")).thenReturn(Optional.of(EMPLOYEE));
+        Optional<Employee> emp = repository.findByCpf("25369242038");
+        assertEquals(EMPLOYEE, emp.get());
+
+        when(repository.findByCpf("25369242038")).thenReturn(Optional.empty());
+
+        repository.deleteByCpf("25369242038");
+        Optional<Employee> new_emp = repository.findByCpf("25369242038");
+
+        verify(repository, atLeast(2)).findByCpf("25369242038");
+        verify(repository, atLeast(1)).deleteByCpf("25369242038");
+        assertTrue(new_emp.isEmpty());
+    }
 }
