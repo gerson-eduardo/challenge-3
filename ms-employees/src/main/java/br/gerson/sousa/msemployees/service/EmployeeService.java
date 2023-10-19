@@ -2,6 +2,7 @@ package br.gerson.sousa.msemployees.service;
 
 import br.gerson.sousa.msemployees.dto.FindEmployeeDto;
 import br.gerson.sousa.msemployees.dto.SaveEmployeeDto;
+import br.gerson.sousa.msemployees.ex.EntityNotFoundException;
 import br.gerson.sousa.msemployees.mapper.EmployeeMapper;
 import br.gerson.sousa.msemployees.model.Employee;
 import br.gerson.sousa.msemployees.model.Role;
@@ -51,15 +52,30 @@ public class EmployeeService {
         return dtos;
     }
     public FindEmployeeDto findById(Long id){
-        return new FindEmployeeDto(employeeRepository.findById(id).get());
+        Optional<Employee> emp = employeeRepository.findById(id);
+        if(emp.isEmpty()){
+            throw new EntityNotFoundException("Employee with id " + id + " not found!");
+        }else {
+            return new FindEmployeeDto(emp.get());
+        }
     }
 
     public FindEmployeeDto findByEmail(String email){
-        return new FindEmployeeDto(employeeRepository.findByEmail(email).get());
+        Optional<Employee> emp = employeeRepository.findByEmail(email);
+        if(emp.isEmpty()){
+            throw new EntityNotFoundException("Employee with email " + email + " not found!");
+        }else {
+            return new FindEmployeeDto(emp.get());
+        }
     }
 
     public FindEmployeeDto findByCpf(String cpf){
-        return new FindEmployeeDto(employeeRepository.findByCpf(cpf).get());
+        Optional<Employee> emp = employeeRepository.findByCpf(cpf);
+        if(emp.isEmpty()){
+            throw new EntityNotFoundException("Employee with cpf " + cpf + " not found!");
+        }else {
+            return new FindEmployeeDto(emp.get());
+        }
     }
 
     @Transactional
