@@ -1,6 +1,7 @@
 package br.gerson.sousa.msvoting.service;
 
 import br.gerson.sousa.msvoting.dto.VoteDto;
+import br.gerson.sousa.msvoting.ex.EntityConflictException;
 import br.gerson.sousa.msvoting.ex.EntityNotFoundException;
 import br.gerson.sousa.msvoting.ex.InvalidRoleException;
 import br.gerson.sousa.msvoting.ex.TimeExceededException;
@@ -38,18 +39,23 @@ public class VoteService {
 
     @Transactional
     public void save(VoteDto dto){
-        Optional<Proposal> proposal = proposalRepository.findByName(dto.getName());
         Boolean validEmployee = validation.validateEmployee(feignClient.findByCpf(dto.getCpf()));
-        LocalDateTime now = LocalDateTime.now();
+        if (validEmployee == null){
+            throw new InvalidRoleException("Role with cpf " + dto.getCpf() + " not found!");
+        }
+        Optional<Proposal> proposal = proposalRepository.findByName(dto.getName());
         if(proposal.isEmpty()){
             throw new EntityNotFoundException("Proposal with name " + dto.getName() + " not found!");
-        }else if(now.isAfter(formatter.stringToDate(proposal.get().getEndingDate()))){
-            throw new TimeExceededException("Poll is closed!");
-        }else if (validEmployee == null){
-            throw new InvalidRoleException("Role with cpf " + dto.getCpf() + " not found!");
-        }else{
-            voteRepository.save(new Vote(proposal.get(), dto.getCpf(), dto.isApproved()));
         }
+        Optional<Vote> vote = voteRepository.findByProposal_NameAndAndCpf(dto.getName(), dto.getCpf());
+        if(vote.isPresent()){
+            throw new EntityConflictException("Employee already voted on proposal " + dto.getName());
+        }
+        LocalDateTime now = LocalDateTime.now();
+        if(now.isAfter(formatter.stringToDate(proposal.get().getEndingDate()))){
+            throw new TimeExceededException("Poll is closed!");
+        }
+        voteRepository.save(new Vote(proposal.get(), dto.getCpf(), dto.isApproved()));
     }
 
     public List<VoteDto> findAll(){
