@@ -49,10 +49,13 @@ public class ProposalService {
 
     @Transactional
     public void endPoll(String proposalName, String cpf){
-        Proposal proposal = proposalRepository.findByName(proposalName).get();
-            boolean approved = countVotes(proposal);
-            proposal.setApproved(approved);
-            proposalRepository.save(proposal);
+        Optional<Proposal> proposal = proposalRepository.findByName(proposalName);
+        if(proposal.isEmpty()) {
+            throw new EntityNotFoundException("Proposal with name " + proposalName + "not found!");
+        }
+        boolean approved = countVotes(proposal.get());
+        proposal.get().setApproved(approved);
+        proposalRepository.save(proposal.get());
 
     }
 
