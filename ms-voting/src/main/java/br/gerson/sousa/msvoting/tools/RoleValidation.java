@@ -3,14 +3,13 @@ package br.gerson.sousa.msvoting.tools;
 import br.gerson.sousa.msvoting.dto.FindRoleDto;
 import org.springframework.cloud.openfeign.FeignClient;
 
+import java.util.Objects;
+
 public class RoleValidation {
-    public Boolean validateEmployee(FindRoleDto dto) {
-        if(dto.getCpf().equals("ADMIN")){
-            return true;
-        }else if (dto.getCpf().equals("USER")){
-            return false;
-        }else{
-            return null;
-        }
+    public boolean validateEmployee(FindRoleDto dto) {
+        return dto.getRole().equals("ADMIN") || dto.getRole().equals("USER");
+    }
+    public boolean validateAdmin(FindRoleDto dto){
+        return dto.getRole().equals("ADMIN");
     }
 }
