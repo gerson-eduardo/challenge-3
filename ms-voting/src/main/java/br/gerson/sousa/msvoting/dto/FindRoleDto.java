@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class RoleDto {
+public class FindRoleDto {
     private String role;
     private String name;
     private String cpf;

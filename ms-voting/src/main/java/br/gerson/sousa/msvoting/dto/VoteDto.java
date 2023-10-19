@@ -16,6 +16,6 @@ public class VoteDto {
     public VoteDto(Vote vote){
         this.name = vote.getProposal().getName();
         this.cpf = vote.getCpf();
-        this.approved = vote.isApproved();
+        this.approved = vote.getApproved();
     }
 }
