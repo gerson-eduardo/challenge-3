@@ -2,7 +2,9 @@ package br.gerson.sousa.msemployees.service;
 
 import br.gerson.sousa.msemployees.dto.FindRoleDto;
 import br.gerson.sousa.msemployees.dto.SaveRoleDto;
+import br.gerson.sousa.msemployees.ex.EntityConflictException;
 import br.gerson.sousa.msemployees.ex.EntityNotFoundException;
+import br.gerson.sousa.msemployees.ex.InvalidRoleException;
 import br.gerson.sousa.msemployees.model.Employee;
 import br.gerson.sousa.msemployees.model.Role;
 import br.gerson.sousa.msemployees.repository.EmployeeRepository;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import javax.management.relation.RoleNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -29,17 +32,16 @@ public class RoleService {
     }
 
     @Transactional
-    public int create(SaveRoleDto dto){
+    public void create(SaveRoleDto dto){
         Optional<Employee> emp = employeeRepository.findByCpf(dto.getCpf());
         if(emp.isEmpty()){
-            return 404;
-        }else if(findByCpf(dto.getCpf()).isPresent()){
-            return 409;
+            throw new EntityNotFoundException("Role with cpf " + dto.getCpf() + " not found!");
+        }else if(roleRepository.findByEmployee_Cpf(dto.getCpf()).isPresent()){
+            throw new EntityConflictException("Role with cpf " + dto.getCpf() + "already present!");
         }else if(!dto.getRole().equals("ADMIN") && !dto.getRole().equals("USER")){
-            return 400;
+            throw new InvalidRoleException("Invalid role found in request. ROLE: " + dto.getRole());
         }else{
             roleRepository.save(new Role(emp.get(), dto.getRole()));
-            return 201;
         }
     }
 
