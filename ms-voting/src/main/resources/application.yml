@@ -8,11 +8,6 @@ spring:
     name: ms-voting
   profiles:
     active: dev
-  cloud:
-    gateway:
-      routes:
-        - id: ms-employees-route
-          uri: lb://ms-employees
 
 eureka:
   client:
@@ -22,7 +17,3 @@ eureka:
       defaultZone: http://localhost:8761/eureka
   instance:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
-
-ms-employees:
-  ribbon:
-    listOfServers: http://localhost:8080
