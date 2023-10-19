@@ -2,6 +2,7 @@ package br.gerson.sousa.msvoting.controller;
 
 import br.gerson.sousa.msvoting.dto.VoteDto;
 import br.gerson.sousa.msvoting.ex.EntityNotFoundException;
+import br.gerson.sousa.msvoting.ex.InvalidRoleException;
 import br.gerson.sousa.msvoting.ex.TimeExceededException;
 import br.gerson.sousa.msvoting.model.Vote;
 import br.gerson.sousa.msvoting.service.VoteService;
@@ -27,12 +28,11 @@ public class VoteController {
         try {
             service.save(dto);
             return ResponseEntity.status(HttpStatus.CREATED).body("Vote saved");
-        }catch (EntityNotFoundException e){
+        }catch (EntityNotFoundException | InvalidRoleException e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }catch (TimeExceededException e){
             return new ResponseEntity<>(HttpStatus.REQUEST_TIMEOUT);
         }
-
     }
 
     @GetMapping("/vote")
