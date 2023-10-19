@@ -1,4 +1,4 @@
-package br.gerson.sousa.msvoting.model;
+package br.gerson.sousa.msvoting.tools;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
