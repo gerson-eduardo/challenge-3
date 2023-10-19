@@ -2,6 +2,8 @@ package br.gerson.sousa.msemployees.service;
 
 import br.gerson.sousa.msemployees.dto.FindEmployeeDto;
 import br.gerson.sousa.msemployees.dto.SaveEmployeeDto;
+import br.gerson.sousa.msemployees.ex.EntityConflictException;
+import br.gerson.sousa.msemployees.ex.EntityNotFoundException;
 import br.gerson.sousa.msemployees.mapper.EmployeeMapper;
 import br.gerson.sousa.msemployees.model.Employee;
 import br.gerson.sousa.msemployees.model.Role;
@@ -10,6 +12,7 @@ import br.gerson.sousa.msemployees.repository.RoleRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -31,14 +34,13 @@ public class EmployeeService {
     }
 
     @Transactional
-    public int create(SaveEmployeeDto dto){
+    public void create(SaveEmployeeDto dto){
         if(employeeRepository.findByCpf(dto.getCpf()).isPresent()){
-            return 409;
+            throw new EntityConflictException("Employee already exists!");
         }else{
             Employee emp = dto.toModel();
             employeeRepository.save(emp);
             roleRepository.save(new Role(emp, "USER"));
-            return 201;
         }
     }
 
@@ -51,36 +53,58 @@ public class EmployeeService {
         return dtos;
     }
     public FindEmployeeDto findById(Long id){
-        return new FindEmployeeDto(employeeRepository.findById(id).get());
+        Optional<Employee> emp = employeeRepository.findById(id);
+        if(emp.isEmpty()){
+            throw new EntityNotFoundException("Employee with id " + id + " not found!");
+        }else {
+            return new FindEmployeeDto(emp.get());
+        }
     }
 
     public FindEmployeeDto findByEmail(String email){
-        return new FindEmployeeDto(employeeRepository.findByEmail(email).get());
+        Optional<Employee> emp = employeeRepository.findByEmail(email);
+        if(emp.isEmpty()){
+            throw new EntityNotFoundException("Employee with email " + email + " not found!");
+        }else {
+            return new FindEmployeeDto(emp.get());
+        }
     }
 
     public FindEmployeeDto findByCpf(String cpf){
-        return new FindEmployeeDto(employeeRepository.findByCpf(cpf).get());
+        Optional<Employee> emp = employeeRepository.findByCpf(cpf);
+        if(emp.isEmpty()){
+            throw new EntityNotFoundException("Employee with cpf " + cpf + " not found!");
+        }else {
+            return new FindEmployeeDto(emp.get());
+        }
     }
 
     @Transactional
-    public int update(SaveEmployeeDto dto){
+    public void update(SaveEmployeeDto dto){
         Optional<Employee> emp = employeeRepository.findByCpf(dto.getCpf());
         if(emp.isEmpty()){
-            return 204;
+            throw new EntityNotFoundException("Employee with cpf " + dto.getCpf() + "not found!");
         }else{
             mapper.updateEmployeeFromSaveEmployeeDto(dto, emp.get());
             employeeRepository.save(emp.get());
-            return 200;
         }
     }
 
     @Transactional
     public void deleteById(Long id){
-        employeeRepository.deleteById(id);
+        try {
+            employeeRepository.deleteById(id);
+        }catch(EmptyResultDataAccessException e){
+            throw new EntityNotFoundException("Employee with id " + id + " not found!");
+        }
     }
 
     @Transactional
     public void deleteByCpf(String cpf){
-        employeeRepository.deleteByCpf(cpf);
+        try {
+            employeeRepository.deleteByCpf(cpf);
+        }catch(EmptyResultDataAccessException e){
+            throw new EntityNotFoundException("Employee with cpf " + cpf + " not found!");
+        }
     }
 }

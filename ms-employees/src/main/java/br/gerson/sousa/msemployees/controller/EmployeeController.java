@@ -2,6 +2,8 @@ package br.gerson.sousa.msemployees.controller;
 
 import br.gerson.sousa.msemployees.dto.FindEmployeeDto;
 import br.gerson.sousa.msemployees.dto.SaveEmployeeDto;
+import br.gerson.sousa.msemployees.ex.EntityConflictException;
+import br.gerson.sousa.msemployees.ex.EntityNotFoundException;
 import br.gerson.sousa.msemployees.model.Employee;
 import br.gerson.sousa.msemployees.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +26,12 @@ public class EmployeeController {
 
     @PostMapping("/employee")
     public ResponseEntity<String > create(@RequestBody SaveEmployeeDto dto){
-        int status  = service.create(dto);
-        String message;
-        if (status == 409){
-            message = "Employee already present!";
-        }else{
-            message = "Employee created!";
+        try {
+            service.create(dto);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Employee created");
+        }catch(EntityConflictException e){
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
-        return ResponseEntity.status(status).body(message);
     }
 
     @GetMapping("/employee")
@@ -41,26 +41,38 @@ public class EmployeeController {
 
     @GetMapping("/employee/id/{id}")
     public ResponseEntity<FindEmployeeDto> findByid(@PathVariable Long id){
-        return ResponseEntity.status(HttpStatus.FOUND).body(service.findById(id));
+        try {
+            return ResponseEntity.status(HttpStatus.FOUND).body(service.findById(id));
+        }catch(EntityNotFoundException e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/employee/{cpf}")
     public ResponseEntity<FindEmployeeDto> findByCpf(@PathVariable String cpf){
-        return ResponseEntity.status(HttpStatus.FOUND).body(service.findByCpf(cpf));
+        try {
+            return ResponseEntity.status(HttpStatus.FOUND).body(service.findByCpf(cpf));
+        }catch(EntityNotFoundException e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/employee/email/{email}")
     public ResponseEntity<FindEmployeeDto> findByEmail(@PathVariable String email){
-        return ResponseEntity.status(HttpStatus.FOUND).body(service.findByEmail(email));
+        try {
+            return ResponseEntity.status(HttpStatus.FOUND).body(service.findByEmail(email));
+        }catch(EntityNotFoundException e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PutMapping("/employee")
     public ResponseEntity<String > update(@RequestBody SaveEmployeeDto dto){
-        int status = service.update(dto);
-        if(status == 204){
-            return ResponseEntity.status(204).body("Employee not found!");
-        }else{
-            return ResponseEntity.status(200).body("Employee updated!");
+        try {
+            service.update(dto);
+            return ResponseEntity.status(HttpStatus.OK).body("Employee updated");
+        }catch(EntityNotFoundException e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
