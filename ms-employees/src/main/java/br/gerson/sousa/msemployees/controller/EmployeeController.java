@@ -42,7 +42,7 @@ public class EmployeeController {
     @GetMapping("/employee/id/{id}")
     public ResponseEntity<FindEmployeeDto> findByid(@PathVariable Long id){
         try {
-            return ResponseEntity.status(HttpStatus.FOUND).body(service.findById(id));
+            return ResponseEntity.ok().body(service.findById(id));
         }catch(EntityNotFoundException e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -51,7 +51,7 @@ public class EmployeeController {
     @GetMapping("/employee/{cpf}")
     public ResponseEntity<FindEmployeeDto> findByCpf(@PathVariable String cpf){
         try {
-            return ResponseEntity.status(HttpStatus.FOUND).body(service.findByCpf(cpf));
+            return ResponseEntity.ok().body(service.findByCpf(cpf));
         }catch(EntityNotFoundException e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -60,7 +60,7 @@ public class EmployeeController {
     @GetMapping("/employee/email/{email}")
     public ResponseEntity<FindEmployeeDto> findByEmail(@PathVariable String email){
         try {
-            return ResponseEntity.status(HttpStatus.FOUND).body(service.findByEmail(email));
+            return ResponseEntity.ok().body(service.findByEmail(email));
         }catch(EntityNotFoundException e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
