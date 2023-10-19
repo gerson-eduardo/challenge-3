@@ -44,8 +44,7 @@ public class ProposalService {
         if(duration == null){
             duration = Duration.ofMinutes(1);
         }
-        Boolean isAdmin = validation.validateEmployee(feignClient.findByCpf(cpf));
-        if(isAdmin != true){
+        if(!validation.validateAdmin(feignClient.findByCpf(cpf))){
             throw new InvalidRoleException("Permision denied!");
         }
         Optional<Proposal> proposal = proposalRepository.findByName(proposalName);
@@ -59,6 +58,9 @@ public class ProposalService {
 
     @Transactional
     public String endPoll(String proposalName, String cpf){
+        if(!validation.validateAdmin(feignClient.findByCpf(cpf))){
+            throw new InvalidRoleException("Permision denied!");
+        }
         Optional<Proposal> proposal = proposalRepository.findByName(proposalName);
         if(proposal.isEmpty()) {
             throw new EntityNotFoundException("Proposal with name " + proposalName + "not found!");
