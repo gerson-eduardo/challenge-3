@@ -2,6 +2,7 @@ package br.gerson.sousa.msemployees.service;
 
 import br.gerson.sousa.msemployees.dto.FindEmployeeDto;
 import br.gerson.sousa.msemployees.dto.SaveEmployeeDto;
+import br.gerson.sousa.msemployees.ex.EntityConflictException;
 import br.gerson.sousa.msemployees.ex.EntityNotFoundException;
 import br.gerson.sousa.msemployees.mapper.EmployeeMapper;
 import br.gerson.sousa.msemployees.model.Employee;
@@ -33,14 +34,13 @@ public class EmployeeService {
     }
 
     @Transactional
-    public int create(SaveEmployeeDto dto){
+    public void create(SaveEmployeeDto dto){
         if(employeeRepository.findByCpf(dto.getCpf()).isPresent()){
-            return 409;
+            throw new EntityConflictException("Employee already exists!");
         }else{
             Employee emp = dto.toModel();
             employeeRepository.save(emp);
             roleRepository.save(new Role(emp, "USER"));
-            return 201;
         }
     }
 
@@ -80,14 +80,13 @@ public class EmployeeService {
     }
 
     @Transactional
-    public int update(SaveEmployeeDto dto){
+    public void update(SaveEmployeeDto dto){
         Optional<Employee> emp = employeeRepository.findByCpf(dto.getCpf());
         if(emp.isEmpty()){
-            return 204;
+            throw new EntityNotFoundException("Employee with cpf " + dto.getCpf() + "not found!");
         }else{
             mapper.updateEmployeeFromSaveEmployeeDto(dto, emp.get());
             employeeRepository.save(emp.get());
-            return 200;
         }
     }
 
