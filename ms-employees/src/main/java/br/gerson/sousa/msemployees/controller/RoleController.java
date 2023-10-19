@@ -48,7 +48,7 @@ public class RoleController {
     @GetMapping("/role/id/{id}")
     public ResponseEntity<FindRoleDto> findById(@PathVariable Long id){
         try {
-            return ResponseEntity.status(HttpStatus.FOUND).body(service.findById(id));
+            return ResponseEntity.ok().body(service.findById(id));
         }catch(EntityNotFoundException e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -57,7 +57,7 @@ public class RoleController {
     @GetMapping("/role/employee/{cpf}")
     public ResponseEntity<FindRoleDto> findByCpf(@PathVariable String cpf){
         try {
-            return ResponseEntity.status(HttpStatus.FOUND).body(service.findByCpf(cpf));
+            return ResponseEntity.ok().body(service.findByCpf(cpf));
         }catch(EntityNotFoundException e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
