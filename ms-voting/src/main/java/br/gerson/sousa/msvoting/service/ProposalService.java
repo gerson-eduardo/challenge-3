@@ -2,6 +2,7 @@ package br.gerson.sousa.msvoting.service;
 
 import br.gerson.sousa.msvoting.dto.FindProposalDto;
 import br.gerson.sousa.msvoting.dto.SaveProposalDto;
+import br.gerson.sousa.msvoting.ex.EntityNotFoundException;
 import br.gerson.sousa.msvoting.model.DateFormatter;
 import br.gerson.sousa.msvoting.model.Proposal;
 import br.gerson.sousa.msvoting.model.Vote;
@@ -17,6 +18,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProposalService {
@@ -33,13 +35,16 @@ public class ProposalService {
 
     @Transactional
     public void startPoll(String proposalName, String cpf, Duration duration){
-        Proposal proposal = proposalRepository.findByName(proposalName).get();
+        Optional<Proposal> proposal = proposalRepository.findByName(proposalName);
+        if(proposal.isEmpty()){
+            throw new EntityNotFoundException("Proposal with name " + proposalName + "not found!");
+        }
         if(duration == null){
             duration = Duration.ofMinutes(1);
         }
         LocalDateTime endingTime = LocalDateTime.now().plus(duration);
-        proposal.setEndingDate(formatter.dateToString(endingTime));
-        proposalRepository.save(proposal);
+        proposal.get().setEndingDate(formatter.dateToString(endingTime));
+        proposalRepository.save(proposal.get());
     }
 
     @Transactional
