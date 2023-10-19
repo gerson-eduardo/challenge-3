@@ -11,6 +11,7 @@ import br.gerson.sousa.msvoting.repository.ProposalRepository;
 import br.gerson.sousa.msvoting.repository.VoteRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -87,32 +88,48 @@ public class ProposalService {
     }
 
     public FindProposalDto findById(Long id){
-        return new FindProposalDto(proposalRepository.findById(id).get());
+        Optional<Proposal> proposal = proposalRepository.findById(id);
+        if(proposal.isEmpty()){
+            throw new EntityNotFoundException("Proposal with id " + id + " not found");
+        }else{
+            return new FindProposalDto(proposal.get());
+        }
     }
     public FindProposalDto findByName(String name){
-        return new FindProposalDto(proposalRepository.findByName(name).get());
+        Optional<Proposal> proposal = proposalRepository.findByName(name);
+        if(proposal.isEmpty()){
+            throw new EntityNotFoundException("Proposal with " + name + " not found");
+        }else{
+            return new FindProposalDto(proposal.get());
+        }
     }
 
     @Transactional
     public void deleteById(Long id){
-        proposalRepository.deleteById(id);
+        try {
+            proposalRepository.deleteById(id);
+        }catch(EmptyResultDataAccessException e){
+            throw new EntityNotFoundException("Proposal with id " + id + " not found");
+        }
     }
     @Transactional
-    public void deleteByName(String name){proposalRepository.deleteByName(name);}
+    public void deleteByName(String name) {
+        try {
+            proposalRepository.deleteByName(name);
+        } catch (EmptyResultDataAccessException e) {
+            throw new EntityNotFoundException("Proposal with name " + name + " not found");
+        }
+    }
 
     boolean countVotes(Proposal proposal){
         List<Vote> votes = voteRepository.findAllByProposal_Name(proposal.getName());
         int yes = 0;
         int no  = 0;
         for(Vote vote : votes){
-            if(vote.isApproved() == true){yes++;}
+            if(vote.getApproved() == true){yes++;}
             else{no++;}
         }
         int result =  yes - no;
-        if(result > 0){
-            return true;
-        }else {
-            return false;
-        }
+        return result > 0;
     }
 }
