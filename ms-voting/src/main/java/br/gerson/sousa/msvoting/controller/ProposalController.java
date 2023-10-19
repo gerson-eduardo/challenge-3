@@ -4,6 +4,7 @@ import br.gerson.sousa.msvoting.dto.FindProposalDto;
 import br.gerson.sousa.msvoting.dto.SaveProposalDto;
 import br.gerson.sousa.msvoting.ex.EntityConflictException;
 import br.gerson.sousa.msvoting.ex.EntityNotFoundException;
+import br.gerson.sousa.msvoting.ex.InvalidRoleException;
 import br.gerson.sousa.msvoting.model.Proposal;
 import br.gerson.sousa.msvoting.service.ProposalService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,8 @@ public class ProposalController {
             return ResponseEntity.ok().body("Poll created");
         }catch (EntityNotFoundException e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }catch (InvalidRoleException e){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
 
@@ -41,6 +44,8 @@ public class ProposalController {
             return ResponseEntity.ok().body(message);
         }catch (EntityNotFoundException e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }catch (InvalidRoleException e){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
 

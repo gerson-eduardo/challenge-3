@@ -1,6 +1,7 @@
 package br.gerson.sousa.msvoting.controller;
 
 import br.gerson.sousa.msvoting.dto.VoteDto;
+import br.gerson.sousa.msvoting.ex.EntityConflictException;
 import br.gerson.sousa.msvoting.ex.EntityNotFoundException;
 import br.gerson.sousa.msvoting.ex.InvalidRoleException;
 import br.gerson.sousa.msvoting.ex.TimeExceededException;
@@ -32,6 +33,8 @@ public class VoteController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }catch (TimeExceededException e){
             return new ResponseEntity<>(HttpStatus.REQUEST_TIMEOUT);
+        }catch (EntityConflictException e){
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
 

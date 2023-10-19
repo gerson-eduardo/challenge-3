@@ -4,11 +4,14 @@ import br.gerson.sousa.msvoting.dto.FindProposalDto;
 import br.gerson.sousa.msvoting.dto.SaveProposalDto;
 import br.gerson.sousa.msvoting.ex.EntityConflictException;
 import br.gerson.sousa.msvoting.ex.EntityNotFoundException;
-import br.gerson.sousa.msvoting.model.DateFormatter;
+import br.gerson.sousa.msvoting.ex.InvalidRoleException;
+import br.gerson.sousa.msvoting.feignCLient.RoleFeignClient;
+import br.gerson.sousa.msvoting.tools.DateFormatter;
 import br.gerson.sousa.msvoting.model.Proposal;
 import br.gerson.sousa.msvoting.model.Vote;
 import br.gerson.sousa.msvoting.repository.ProposalRepository;
 import br.gerson.sousa.msvoting.repository.VoteRepository;
+import br.gerson.sousa.msvoting.tools.RoleValidation;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -16,9 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,22 +28,28 @@ public class ProposalService {
 
     private ProposalRepository proposalRepository;
     private VoteRepository voteRepository;
+    private RoleFeignClient feignClient;
     private DateFormatter formatter= new DateFormatter();
+    private RoleValidation validation = new RoleValidation();
 
     @Autowired
-    public ProposalService(ProposalRepository proposalRepository, VoteRepository voteRepository){
+    public ProposalService(ProposalRepository proposalRepository, VoteRepository voteRepository, RoleFeignClient feignClient){
         this.proposalRepository = proposalRepository;
         this.voteRepository = voteRepository;
+        this.feignClient = feignClient;
     }
 
     @Transactional
     public void startPoll(String proposalName, String cpf, Duration duration){
+        if(duration == null){
+            duration = Duration.ofMinutes(1);
+        }
+        if(!validation.validateAdmin(feignClient.findByCpf(cpf))){
+            throw new InvalidRoleException("Permision denied!");
+        }
         Optional<Proposal> proposal = proposalRepository.findByName(proposalName);
         if(proposal.isEmpty()){
             throw new EntityNotFoundException("Proposal with name " + proposalName + "not found!");
-        }
-        if(duration == null){
-            duration = Duration.ofMinutes(1);
         }
         LocalDateTime endingTime = LocalDateTime.now().plus(duration);
         proposal.get().setEndingDate(formatter.dateToString(endingTime));
@@ -51,6 +58,9 @@ public class ProposalService {
 
     @Transactional
     public String endPoll(String proposalName, String cpf){
+        if(!validation.validateAdmin(feignClient.findByCpf(cpf))){
+            throw new InvalidRoleException("Permision denied!");
+        }
         Optional<Proposal> proposal = proposalRepository.findByName(proposalName);
         if(proposal.isEmpty()) {
             throw new EntityNotFoundException("Proposal with name " + proposalName + "not found!");
