@@ -17,6 +17,7 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
     List<Vote> findAllByCpf(String cpf);
 
     Optional<Vote> findById(Long id);
+    Optional<Vote> findByProposal_NameAndAndCpf(String proposalName, String cpf);
 
     void deleteById(Long id);
     void deleteAllByCpf(String cpf);
