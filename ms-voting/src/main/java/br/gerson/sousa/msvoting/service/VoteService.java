@@ -39,8 +39,7 @@ public class VoteService {
 
     @Transactional
     public void save(VoteDto dto){
-        Boolean validEmployee = validation.validateEmployee(feignClient.findByCpf(dto.getCpf()));
-        if (validEmployee == null){
+        if (!validation.validateEmployee(feignClient.findByCpf(dto.getCpf()))){
             throw new InvalidRoleException("Role with cpf " + dto.getCpf() + " not found!");
         }
         Optional<Proposal> proposal = proposalRepository.findByName(dto.getName());
