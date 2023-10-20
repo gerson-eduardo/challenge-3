@@ -1,0 +1,1089 @@
+{
+	"info": {
+		"_postman_id": "9bd015c9-c2eb-4f54-95c4-2e9b891f77af",
+		"name": "api-gateway",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29812431"
+	},
+	"item": [
+		{
+			"name": "ms-employees",
+			"item": [
+				{
+					"name": "employees",
+					"item": [
+						{
+							"name": "create employees",
+							"item": [
+								{
+									"name": "Create employee 1",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\":\"jinbei\",\n    \"cpf\":\"25369242038\",\n    \"address\":\"Fishman Island 407\",\n    \"email\":\"jinbei@email.com\",\n    \"password\":\"weak_password\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{employee-gate}}/employee",
+											"host": [
+												"{{employee-gate}}"
+											],
+											"path": [
+												"employee"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Create employee 2",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\":\"nami\",\n    \"cpf\":\"75694123594\",\n    \"address\":\"Cocoyasi Village 630\",\n    \"email\":\"nami@email.com\",\n    \"password\":\"expensive_password\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{employee-gate}}/employee",
+											"host": [
+												"{{employee-gate}}"
+											],
+											"path": [
+												"employee"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Create employee 3",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\":\"estinien\",\n    \"cpf\":\"94875123684\",\n    \"address\":\"Ishigard 777\",\n    \"email\":\"ishigard@email.com\",\n    \"password\":\"edigy_password\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{employee-gate}}/employee",
+											"host": [
+												"{{employee-gate}}"
+											],
+											"path": [
+												"employee"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "find employees",
+							"item": [
+								{
+									"name": "Find all employees",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{employee-gate}}/employee",
+											"host": [
+												"{{employee-gate}}"
+											],
+											"path": [
+												"employee"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Find employee by cpf",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{employee-gate}}/employee/25369242038",
+											"host": [
+												"{{employee-gate}}"
+											],
+											"path": [
+												"employee",
+												"25369242038"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Find employee by id",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{employee-gate}}/employee/id/1",
+											"host": [
+												"{{employee-gate}}"
+											],
+											"path": [
+												"employee",
+												"id",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Find employee by email",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{employee-gate}}/employee/email/jinbei@email.com",
+											"host": [
+												"{{employee-gate}}"
+											],
+											"path": [
+												"employee",
+												"email",
+												"jinbei@email.com"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "delete employees",
+							"item": [
+								{
+									"name": "Delete employee by cpf",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\":\"jinbei\",\n    \"cpf\":\"25369242038\",\n    \"address\":\"Fishman Island 407\",\n    \"email\":\"jinbei@email.com\",\n    \"password\":\"weak_password\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{employee-gate}}/employee/25369242038",
+											"host": [
+												"{{employee-gate}}"
+											],
+											"path": [
+												"employee",
+												"25369242038"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Delete employee by id",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\":\"jinbei\",\n    \"cpf\":\"25369242038\",\n    \"address\":\"Fishman Island 407\",\n    \"email\":\"jinbei@email.com\",\n    \"password\":\"weak_password\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{employee-gate}}/employee/id/1",
+											"host": [
+												"{{employee-gate}}"
+											],
+											"path": [
+												"employee",
+												"id",
+												"1"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Update employee",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\":\"jinbei\",\n    \"cpf\":\"25369242038\",\n    \"address\":\"Fishman Island 407\",\n    \"email\":\"jinbei@email.com\",\n    \"password\":\"weak_password\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{employee-gate}}/employee",
+									"host": [
+										"{{employee-gate}}"
+									],
+									"path": [
+										"employee"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "role",
+					"item": [
+						{
+							"name": "create roles",
+							"item": [
+								{
+									"name": "Create role 1",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"cpf\":\"25369242038\",\n    \"role\":\"USER\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{employee-gate}}/role",
+											"host": [
+												"{{employee-gate}}"
+											],
+											"path": [
+												"role"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Create role 2",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"cpf\":\"75694123594\",\n    \"role\":\"USER\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{employee-gate}}/role",
+											"host": [
+												"{{employee-gate}}"
+											],
+											"path": [
+												"role"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Create role 3",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"cpf\":\"94875123684\",\n    \"role\":\"ADMIN\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{employee-gate}}/role",
+											"host": [
+												"{{employee-gate}}"
+											],
+											"path": [
+												"role"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "find roles",
+							"item": [
+								{
+									"name": "Find all roles",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{employee-gate}}/role",
+											"host": [
+												"{{employee-gate}}"
+											],
+											"path": [
+												"role"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Find role by cpf",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{employee-gate}}/role/employee/25369242038",
+											"host": [
+												"{{employee-gate}}"
+											],
+											"path": [
+												"role",
+												"employee",
+												"25369242038"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Find role by id",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{employee-gate}}/role/id/1",
+											"host": [
+												"{{employee-gate}}"
+											],
+											"path": [
+												"role",
+												"id",
+												"1"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "delete roles",
+							"item": [
+								{
+									"name": "Delete role by id",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{employee-gate}}/role/id/1",
+											"host": [
+												"{{employee-gate}}"
+											],
+											"path": [
+												"role",
+												"id",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Delete role by cpf",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{employee-gate}}/role/25369242038",
+											"host": [
+												"{{employee-gate}}"
+											],
+											"path": [
+												"role",
+												"25369242038"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Update role",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"cpf\":\"25369242038\",\n    \"role\":\"ADMIN\"\n}"
+								},
+								"url": {
+									"raw": "{{ms-employees}}/api/v1/role",
+									"host": [
+										"{{ms-employees}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"role"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "ms-voting",
+			"item": [
+				{
+					"name": "proposal",
+					"item": [
+						{
+							"name": "create proposals",
+							"item": [
+								{
+									"name": "Create proposal-1",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\":\"proposal-1\",\n    \"description\":\"the proposal 1 is about this, this and this\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{voting-gate}}/proposal?cpf=25369242038",
+											"host": [
+												"{{voting-gate}}"
+											],
+											"path": [
+												"proposal"
+											],
+											"query": [
+												{
+													"key": "cpf",
+													"value": "25369242038"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Create proposal-2",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\":\"proposal-2\",\n    \"description\":\"the proposal 2 is about this, this and this\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{voting-gate}}/proposal?cpf=75694123594",
+											"host": [
+												"{{voting-gate}}"
+											],
+											"path": [
+												"proposal"
+											],
+											"query": [
+												{
+													"key": "cpf",
+													"value": "75694123594"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Create proposal-3",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\":\"proposal-3\",\n    \"description\":\"the proposal 3 is about this, this and this\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{voting-gate}}/proposal?cpf=94875123684",
+											"host": [
+												"{{voting-gate}}"
+											],
+											"path": [
+												"proposal"
+											],
+											"query": [
+												{
+													"key": "cpf",
+													"value": "94875123684"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "find proposals",
+							"item": [
+								{
+									"name": "Find all proposals",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\":\"proposal-1\",\n    \"description\":\"the proposal 1 is about this, this and this\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{voting-gate}}/proposal",
+											"host": [
+												"{{voting-gate}}"
+											],
+											"path": [
+												"proposal"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Find all proposals by result",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\":\"proposal-1\",\n    \"description\":\"the proposal 1 is about this, this and this\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{voting-gate}}/proposal/result/true",
+											"host": [
+												"{{voting-gate}}"
+											],
+											"path": [
+												"proposal",
+												"result",
+												"true"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Find proposal by id",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\":\"proposal-1\",\n    \"description\":\"the proposal 1 is about this, this and this\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{voting-gate}}/proposal/id/1",
+											"host": [
+												"{{voting-gate}}"
+											],
+											"path": [
+												"proposal",
+												"id",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Find proposal by name",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\":\"proposal-1\",\n    \"description\":\"the proposal 1 is about this, this and this\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{voting-gate}}/proposal/name/proposal-1",
+											"host": [
+												"{{voting-gate}}"
+											],
+											"path": [
+												"proposal",
+												"name",
+												"proposal-1"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "delete proposal",
+							"item": [
+								{
+									"name": "Delete proposal by id",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\":\"proposal-1\",\n    \"description\":\"the proposal 1 is about this, this and this\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{voting-gate}}/proposal/id/1",
+											"host": [
+												"{{voting-gate}}"
+											],
+											"path": [
+												"proposal",
+												"id",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Delete proposal by name",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\":\"proposal-1\",\n    \"description\":\"the proposal 1 is about this, this and this\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{voting-gate}}/proposal/name/proposal-1",
+											"host": [
+												"{{voting-gate}}"
+											],
+											"path": [
+												"proposal",
+												"name",
+												"proposal-1"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "start-poll",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{voting-gate}}/proposal/name/proposal-1/start-poll?cpf=94875123684",
+									"host": [
+										"{{voting-gate}}"
+									],
+									"path": [
+										"proposal",
+										"name",
+										"proposal-1",
+										"start-poll"
+									],
+									"query": [
+										{
+											"key": "cpf",
+											"value": "94875123684"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "end-poll",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{voting-gate}}/proposal/name/proposal-1/end-poll?cpf=94875123684",
+									"host": [
+										"{{voting-gate}}"
+									],
+									"path": [
+										"proposal",
+										"name",
+										"proposal-1",
+										"end-poll"
+									],
+									"query": [
+										{
+											"key": "cpf",
+											"value": "94875123684"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "vote",
+					"item": [
+						{
+							"name": "create vote",
+							"item": [
+								{
+									"name": "Create vote 1",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\":\"proposal-1\",\n    \"cpf\":\"25369242038\",\n    \"approved\":true\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{voting-gate}}/vote",
+											"host": [
+												"{{voting-gate}}"
+											],
+											"path": [
+												"vote"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Create vote 2",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\":\"proposal-1\",\n    \"cpf\":\"75694123594\",\n    \"approved\":false\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{voting-gate}}/vote",
+											"host": [
+												"{{voting-gate}}"
+											],
+											"path": [
+												"vote"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Create vote 3",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\":\"proposal-1\",\n    \"cpf\":\"94875123684\",\n    \"approved\":true\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{voting-gate}}/vote",
+											"host": [
+												"{{voting-gate}}"
+											],
+											"path": [
+												"vote"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "find vote",
+							"item": [
+								{
+									"name": "Find all votes",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\":\"proposal-1\",\n    \"cpf\":\"4865714593\",\n    \"approved\":true\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{voting-gate}}/vote",
+											"host": [
+												"{{voting-gate}}"
+											],
+											"path": [
+												"vote"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Find all votes by proposal name",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\":\"proposal-1\",\n    \"cpf\":\"4865714593\",\n    \"approved\":true\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{voting-gate}}/vote/proposal-name/proposal-1",
+											"host": [
+												"{{voting-gate}}"
+											],
+											"path": [
+												"vote",
+												"proposal-name",
+												"proposal-1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Find all votes by proposal id",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\":\"proposal-1\",\n    \"cpf\":\"4865714593\",\n    \"approved\":true\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{voting-gate}}/vote/proposal-id/1",
+											"host": [
+												"{{voting-gate}}"
+											],
+											"path": [
+												"vote",
+												"proposal-id",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Find all votes by cpf by cpf",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\":\"proposal-1\",\n    \"cpf\":\"4865714593\",\n    \"approved\":true\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{voting-gate}}/vote/employee/25369242038",
+											"host": [
+												"{{voting-gate}}"
+											],
+											"path": [
+												"vote",
+												"employee",
+												"25369242038"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "delete vote",
+							"item": [
+								{
+									"name": "Delete vote by id",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{voting-gate}}/vote/id/1",
+											"host": [
+												"{{voting-gate}}"
+											],
+											"path": [
+												"vote",
+												"id",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Delete all votes by cpf",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{voting-gate}}/vote/iemployee/4865714593",
+											"host": [
+												"{{voting-gate}}"
+											],
+											"path": [
+												"vote",
+												"iemployee",
+												"4865714593"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	]
+}
