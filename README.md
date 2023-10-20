@@ -114,6 +114,6 @@ The vote entity holds important information about the votes. On creation the inf
 #### Known issues:
 1. In the moment it is possible to start multiple times polls with the same proposal.
 2. In the moment any sting will be accepted as cpf
-
-
+3. Wrong error message when failing to delete a vote by id
+___
 ###### Created by Gerson Eduardo
