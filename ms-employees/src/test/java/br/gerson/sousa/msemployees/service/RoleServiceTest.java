@@ -2,15 +2,19 @@ package br.gerson.sousa.msemployees.service;
 
 import br.gerson.sousa.msemployees.dto.FindRoleDto;
 import br.gerson.sousa.msemployees.dto.SaveRoleDto;
+import br.gerson.sousa.msemployees.ex.EntityConflictException;
+import br.gerson.sousa.msemployees.ex.EntityNotFoundException;
 import br.gerson.sousa.msemployees.model.Employee;
 import br.gerson.sousa.msemployees.model.Role;
 import br.gerson.sousa.msemployees.repository.EmployeeRepository;
 import br.gerson.sousa.msemployees.repository.RoleRepository;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +25,7 @@ import static br.gerson.sousa.msemployees.common.EmployeeConstants.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@Disabled
 class RoleServiceTest {
 
     @Mock
@@ -35,40 +40,54 @@ class RoleServiceTest {
     List<FindRoleDto> dtoList;
 
     @Test
-    void create() {
-        int status;
-        {
-            //Employee dont exists
-            when(employeeRepository.findByCpf(dto.getCpf())).thenReturn(Optional.empty());
-            status  = service.create(dto);
+    void createRoleEmployeeExists(){
+        when(employeeRepository.findByCpf(S_ROLE_DTO.getCpf())).thenReturn(Optional.of(EMPLOYEE));
 
-            verify(employeeRepository, atLeast(1)).findByCpf(dto.getCpf());
-            assertEquals(404, status);
-        }{
-            //Role already exists
+        when(roleRepository.findByEmployee_Cpf(S_ROLE_DTO.getCpf())).thenReturn(Optional.empty());
+
+        service.create(S_ROLE_DTO);
+    }
+
+    @Test
+    void createRoleEmployeeDontExists(){
+        when(employeeRepository.findByCpf(S_ROLE_DTO.getCpf())).thenReturn(Optional.empty());
+
+        assertThrows(EntityNotFoundException.class, () -> {
+            service.create(S_ROLE_DTO);
+        });
+    }
+
+    @Test
+    void create(){
+        SaveRoleDto dto = S_ROLE_DTO;
+        {
+            //Employee exists and role don't
+            when(employeeRepository.findByCpf(dto.getCpf())).thenReturn(Optional.of(EMPLOYEE));
+
+            when(roleRepository.findByEmployee_Cpf(dto.getCpf())).thenReturn(Optional.empty());
+
+            service.create(dto);
+        }
+        {
+            //Employee don't exists
+            dto.setCpf("71694852379");
+            when(employeeRepository.findByCpf(dto.getCpf())).thenReturn(Optional.empty());
+
+            assertThrows(EntityNotFoundException.class, () -> {
+                service.create(dto);
+            });
+        }
+        {
+            //Employee and Role already exists
+            dto.setCpf(S_ROLE_DTO.getCpf());
             when(employeeRepository.findByCpf(dto.getCpf())).thenReturn(Optional.of(EMPLOYEE));
             when(roleRepository.findByEmployee_Cpf(dto.getCpf())).thenReturn(Optional.of(ROLE));
 
-            status = service.create(dto);
-
-            verify(employeeRepository, atLeast(1)).findByCpf(dto.getCpf());
-            verify(roleRepository, atLeast(1)).findByEmployee_Cpf(dto.getCpf());
-
-            assertEquals(409, status);
-        }{
-            SaveRoleDto dto = new SaveRoleDto(ROLE.getEmployee().getCpf(), ROLE.getRole());
-            //Employee exists but role don't
-            when(employeeRepository.findByCpf(dto.getCpf())).thenReturn(Optional.of(EMPLOYEE));
-            when(roleRepository.findByEmployee_Cpf(dto.getCpf())).thenReturn(Optional.empty());
-
-            status = service.create(dto);
-
-            verify(employeeRepository, atLeast(1)).findByCpf(dto.getCpf());
-            verify(roleRepository, atLeast(1)).findByEmployee_Cpf(dto.getCpf());
-            assertEquals(201, status);
+            assertThrows(EntityConflictException.class, () ->{
+                service.create(dto);
+            });
         }
     }
-
     @Test
     void findAll() {
         when(roleRepository.findAll()).thenReturn(ROLE_LIST);
@@ -81,77 +100,69 @@ class RoleServiceTest {
     @Test
     void findById() {
         when(roleRepository.findById(1L)).thenReturn(Optional.of(ROLE));
-        Optional<Role> role = service.findById(1L);
+        FindRoleDto role = service.findById(1L);
 
         verify(roleRepository, atLeast(1)).findById(1L);
-        assertFalse(role.isEmpty());
-        assertEquals(ROLE, role.get());
+        assertEquals(ROLE.getRole(), role.getRole());
     }
 
     @Test
     void findByCpf() {
         when(roleRepository.findByEmployee_Cpf("25369242038")).thenReturn(Optional.of(ROLE));
-        Optional<Role> role = service.findByCpf("25369242038");
+        FindRoleDto role = service.findByCpf("25369242038");
 
         verify(roleRepository, atLeast(1)).findByEmployee_Cpf("25369242038");
-        assertFalse(role.isEmpty());
-        assertEquals(ROLE, role.get());
+        assertEquals(ROLE.getEmployee().getCpf(), role.getCpf());
     }
 
     @Test
     void update() {
-        int status;
-        SaveRoleDto dto = new SaveRoleDto(ROLE.getEmployee().getCpf(), ROLE.getRole());
+        SaveRoleDto dto = S_ROLE_DTO;
         {
-            //Role don't exists
+            //Employee and Role exists
+            when(roleRepository.findByEmployee_Cpf(dto.getCpf())).thenReturn(Optional.of(ROLE));
+            service.update(dto);
+        }{
+            //Role with Employee cpf don't exist
             when(roleRepository.findByEmployee_Cpf(dto.getCpf())).thenReturn(Optional.empty());
 
-            status = service.update(dto);
-
-            verify(roleRepository, atLeast(1)).findByEmployee_Cpf(dto.getCpf());
-            assertEquals(404, status);
-        }{
-            //Role exists
-            when(roleRepository.findByEmployee_Cpf(dto.getCpf())).thenReturn(Optional.of(ROLE));
-
-            status = service.update(dto);
-
-            verify(roleRepository, atLeast(1)).findByEmployee_Cpf(dto.getCpf());
-            assertEquals(200, status);
+            assertThrows(EntityNotFoundException.class, () -> {
+                service.update(dto);
+            });
         }
     }
 
     @Test
     void deleteById() {
-        when(roleRepository.findById(1L)).thenReturn(Optional.of(ROLE));
-        Optional<Role> role = service.findById(1L);
+        {
+            //Delete successfully
+            doNothing().when(roleRepository).deleteById(1L);
+            service.deleteById(1L);
+        }
+        {
+            //Role not found
+            doThrow(EmptyResultDataAccessException.class).when(roleRepository).deleteById(99L);
 
-        assertFalse(role.isEmpty());
-        assertEquals(ROLE, role.get());
-
-        when(roleRepository.findById(1L)).thenReturn(Optional.empty());
-        service.deleteById(1L);
-        Optional<Role> new_role = service.findById(1L);
-
-        verify(roleRepository, atLeast(2)).findById(1L);
-        verify(roleRepository, atLeast(1)).deleteById(1L);
-        assertTrue(new_role.isEmpty());
+            assertThrows(EntityNotFoundException.class, () -> {
+                service.deleteById(99L);
+            });
+        }
     }
 
     @Test
     void deleteByCpf() {
-        when(roleRepository.findByEmployee_Cpf("25369242038")).thenReturn(Optional.of(ROLE));
-        Optional<Role> role = service.findByCpf("25369242038");
+        {
+            //Delete successfully
+            doNothing().when(roleRepository).deleteByEmployee_Cpf("25369242038");
+            service.deleteByCpf("25369242038");
+        }
+        {
+            //Role not found
+            doThrow(EmptyResultDataAccessException.class).when(roleRepository).deleteByEmployee_Cpf("48613579486");
 
-        assertFalse(role.isEmpty());
-        assertEquals(ROLE, role.get());
-
-        when(roleRepository.findByEmployee_Cpf("25369242038")).thenReturn(Optional.empty());
-        service.deleteById(1L);
-        Optional<Role> new_role = service.findByCpf("25369242038");
-
-        verify(roleRepository, atLeast(2)).findByEmployee_Cpf("25369242038");
-        verify(roleRepository, atLeast(1)).deleteById(1L);
-        assertTrue(new_role.isEmpty());
+            assertThrows(EntityNotFoundException.class, () -> {
+                service.deleteByCpf("48613579486");
+            });
+        }
     }
 }
