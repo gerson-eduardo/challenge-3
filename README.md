@@ -1,4 +1,4 @@
-## Proposal management system
+## Proposal Management System
 
 This project is about creating microservices for a voting system. By using a microservice architecture the system needs to:
 1. Create a system that accepts proposals for improvements in the company. 
@@ -11,7 +11,7 @@ ___
 In the collection folder you can find the requests that my program accepts. There you will also find the environment variables necessary to use the microservices. The most used requests are described bellow each entity description.
 
 ###### Step by step guide:
-1. Create employees by using the POST request to the EmployeeController.
+1. Create employees by using the POST request in the EmployeeController.
 2. Update an employee role to ADMIN so that they can start and end polls.
 3. Create a proposal using any employee cpf.
 4. Start the voting session by using the  start-poll POST request to the ProposalController  with a valid ADMIN cpf.
@@ -24,7 +24,7 @@ ___
 The ms-employees microservice is used to register the company employees , give then roles, check their permissions as most HR systems. When creating an employee their base role is automatically assigned to USER. To delete an employee form the database their role must be deleted first.
 
 
-#### The employee entity:
+#### The Employee Entity:
 
 | Employee | SaveEmployeeDto | FindEmployeeDto |
 | - | - | - |
@@ -47,7 +47,7 @@ The employee entity holds all the personal information's about the company emplo
 2. Find an employee by using an cpf in the path
 3. Update an employee by using an SaveEmployeeDto as body of the request.
 4. Delete an employee by using an cpf in the path(the employee role must be deleted before the employee deletion)
-##### The role entity:
+##### The Role Entity:
 
 | Role | SaveRoleDto | FindRoleDto|
 | - | - | - |
@@ -71,15 +71,15 @@ ___
 ### MS-VOTES
 The ms-votes is the microservice that stores the information's about the proposals and votes. The microservice performs most of the standard CRUD operations and calculates the result of a proposal based on the  number of votes. The proposal will be accepted if the number of approval vote are higher than 50% of the total votes.The microservice will check any POST request to validate if the employee exists on the database. 
 
-#### The proposal entity:
+#### The Proposal Entity:
 | Proposal | SaveProposalDto | FindProposalDto |
 | - | - | - |
 |Long id | String name | String name |
 |String name | String description | String description |
 |String description | | creationDate |
 |String creationDate | | endingDate |
-|String endingDate | | Boolean aprooved |
-|Boolean aprooved | | |
+|String endingDate | | Boolean approved |
+|Boolean approved | | |
 
 The proposal entity holds information about the objective of the proposal,  important time information and the result information(the value starts as null). When a proposal is created a creationDate is inserted in the entity object along with the proposal name and description. The endingDate is inserted on poll creation and, finally, the approved boolean value is received after ending the poll
 ##### Most important methods:
@@ -94,7 +94,8 @@ The proposal entity holds information about the objective of the proposal,  impo
 3. Create the proposal by using an SaveProposalDto as the request body.
 4. Find  an proposal by using the proposal name in the path of the request.
 5. Delete a proposal by using the proposal name in the path.
-#### The vote entity:
+   
+#### The Vote Entity:
 | Vote | VoteDto | 
 | - | - |
 | Long id | String name |
@@ -112,8 +113,8 @@ The vote entity holds important information about the votes. On creation the inf
 2. Find all employee votes by using an employee cpf in the path.
 3. Delete all votes by an employee by using the employee cpf in the path.
 #### Known issues:
-1. In the moment it is possible to start multiple times polls with the same proposal.
-2. In the moment any sting will be accepted as cpf
-3. Wrong error message when failing to delete a vote by id
+1. Currently the moment it is possible to start multiple times polls with the same proposal.
+2. Currently the moment any sting will be accepted as cpf.
+3. The delete method inside the deleteVoteById is returning a message of success even when no table registry is deleted.
 ___
 ###### Created by Gerson Eduardo
