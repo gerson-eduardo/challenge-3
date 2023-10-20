@@ -50,12 +50,14 @@ public class ProposalController {
     }
 
     @PostMapping("/proposal")
-    public ResponseEntity<String> create(@RequestBody SaveProposalDto dto){
+    public ResponseEntity<String> create(@RequestBody SaveProposalDto dto, @RequestParam String cpf){
         try {
-            service.save(dto);
+            service.save(dto, cpf);
             return ResponseEntity.status(HttpStatus.CREATED).body("Proposal created");
         }catch(EntityConflictException e){
             return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }catch (InvalidRoleException e){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
 
