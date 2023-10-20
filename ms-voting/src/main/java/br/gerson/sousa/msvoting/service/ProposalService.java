@@ -74,9 +74,11 @@ public class ProposalService {
 
 
     @Transactional
-    public void save(SaveProposalDto dto){
+    public void save(SaveProposalDto dto, String cpf){
         if(proposalRepository.findByName(dto.getName()).isPresent()){
             throw new EntityConflictException("Proposal already exists!");
+        }if(!validation.validateEmployee(feignClient.findByCpf(cpf))){
+            throw new InvalidRoleException("Employee not found!");
         }else{
             LocalDateTime now = LocalDateTime.now();
             Proposal proposal = dto.toModel();
