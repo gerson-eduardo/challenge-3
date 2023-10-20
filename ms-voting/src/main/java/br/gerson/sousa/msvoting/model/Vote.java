@@ -15,6 +15,7 @@ public class Vote {
     private Long id;
     @ManyToOne
     private Proposal proposal;
+    @Column(nullable = false)
     private String cpf;
     private Boolean approved;
 
