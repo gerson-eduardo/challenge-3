@@ -4,12 +4,9 @@ import br.gerson.sousa.msemployees.dto.FindEmployeeDto;
 import br.gerson.sousa.msemployees.dto.SaveEmployeeDto;
 import br.gerson.sousa.msemployees.ex.EntityConflictException;
 import br.gerson.sousa.msemployees.ex.EntityNotFoundException;
-import br.gerson.sousa.msemployees.model.Employee;
 import br.gerson.sousa.msemployees.service.EmployeeService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +17,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static br.gerson.sousa.msemployees.common.EmployeeConstants.*;
+import static br.gerson.sousa.msemployees.common.EmployeeConstants.F_EMP_DTO;
+import static br.gerson.sousa.msemployees.common.EmployeeConstants.S_EMP_DTO;
 import static org.mockito.Mockito.when;
 
 @WebMvcTest(EmployeeController.class)
@@ -78,7 +75,7 @@ class EmployeeControllerTest {
     }
 
     @Test
-    void findById_employee_dont_exists() throws Exception, EntityNotFoundException{
+    void findById_employee_dont_exists() throws Exception{
         Mockito.doThrow(EntityNotFoundException.class).when(employeeService).findById(1L);
 
         mvc.perform(MockMvcRequestBuilders.get("/api/v1/employee/id/1")
@@ -87,7 +84,7 @@ class EmployeeControllerTest {
     }
 
     @Test
-    void findByCpf_employee_exists() throws Exception, EntityNotFoundException{
+    void findByCpf_employee_exists() throws Exception{
         FindEmployeeDto dto = F_EMP_DTO;
 
         when(employeeService.findByCpf("25369242038")).thenReturn(dto);
@@ -101,7 +98,7 @@ class EmployeeControllerTest {
     }
 
     @Test
-    void findByCpf_employee_dont_exists() throws Exception, EntityNotFoundException{
+    void findByCpf_employee_dont_exists() throws Exception{
         FindEmployeeDto dto = F_EMP_DTO;
 
         Mockito.doThrow(EntityNotFoundException.class).when(employeeService).findByCpf("94685123794");
@@ -112,7 +109,7 @@ class EmployeeControllerTest {
     }
 
     @Test
-    void findByEmail_employee_exists() throws Exception, EntityNotFoundException {
+    void findByEmail_employee_exists() throws Exception {
         FindEmployeeDto dto = F_EMP_DTO;
 
         when(employeeService.findByEmail("jinbei@email.com")).thenReturn(dto);
@@ -126,10 +123,10 @@ class EmployeeControllerTest {
     }
 
     @Test
-    void findByEmail_employee_dont_exist() throws Exception, EntityNotFoundException{
+    void findByEmail_employee_dont_exist() throws Exception{
         FindEmployeeDto dto = F_EMP_DTO;
 
-        Mockito.doThrow(EntityNotFoundException.class).when(employeeService.findByEmail("jinbei@email.com"));
+        Mockito.doThrow(EntityNotFoundException.class).when(employeeService).findByEmail("jinbei@email.com");
 
         mvc.perform(MockMvcRequestBuilders.get("/api/v1/employee/email/jinbei@email.com")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -169,9 +166,7 @@ class EmployeeControllerTest {
     }
 
     @Test
-    @Disabled
-    @Tag("exception-needs-implementation")
-    void deleteByCpf_employee_dont_exists() throws Exception, EntityNotFoundException {
+    void deleteByCpf_employee_dont_exists() throws Exception{
         Mockito.doThrow(EntityNotFoundException.class).when(employeeService).deleteByCpf("49687153684");
 
         mvc.perform(MockMvcRequestBuilders.delete("/api/v1/employee/49687153684"))
@@ -179,8 +174,19 @@ class EmployeeControllerTest {
     }
 
     @Test
-    @Tag("exception-needs-implementation")
-    void deleteById() {
+    void deleteById_employee_exists() throws Exception {
+        Mockito.doNothing().when(employeeService).deleteById(1L);
+
+        mvc.perform(MockMvcRequestBuilders.delete("/api/v1/employee/id/1"))
+                .andExpect(MockMvcResultMatchers.status().isAccepted());
+    }
+
+    @Test
+    void deleteById_employee_dont_exists() throws Exception {
+        Mockito.doThrow(EntityNotFoundException.class).when(employeeService).deleteById(1L);
+
+        mvc.perform(MockMvcRequestBuilders.delete("/api/v1/employee/id/1"))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
     public String objectToJson(Object obj) throws JsonProcessingException {
