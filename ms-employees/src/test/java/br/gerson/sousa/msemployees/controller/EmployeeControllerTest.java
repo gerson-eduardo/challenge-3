@@ -4,14 +4,10 @@ import br.gerson.sousa.msemployees.dto.FindEmployeeDto;
 import br.gerson.sousa.msemployees.dto.SaveEmployeeDto;
 import br.gerson.sousa.msemployees.ex.EntityConflictException;
 import br.gerson.sousa.msemployees.ex.EntityNotFoundException;
-import br.gerson.sousa.msemployees.model.Employee;
 import br.gerson.sousa.msemployees.service.EmployeeService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -21,8 +17,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static br.gerson.sousa.msemployees.common.EmployeeConstants.*;
+import static br.gerson.sousa.msemployees.common.EmployeeConstants.F_EMP_DTO;
+import static br.gerson.sousa.msemployees.common.EmployeeConstants.S_EMP_DTO;
 import static org.mockito.Mockito.when;
 
 @WebMvcTest(EmployeeController.class)
