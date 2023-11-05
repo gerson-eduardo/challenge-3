@@ -78,13 +78,22 @@ public class EmployeeController {
 
     @DeleteMapping("/employee/{cpf}")
     public ResponseEntity<String> deleteByCpf(@PathVariable String  cpf){
-        service.deleteByCpf(cpf);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Employee deleted successfully");
+        try {
+            service.deleteByCpf(cpf);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Employee deleted successfully");
+        }catch (EntityNotFoundException e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
     }
 
     @DeleteMapping("/employee/id/{id}")
     public ResponseEntity<String> deleteById(@PathVariable Long id){
-        service.deleteById(id);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Employee deleted successfully");
+        try {
+            service.deleteById(id);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Employee deleted successfully");
+        }catch (EntityNotFoundException e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }
