@@ -42,7 +42,7 @@ public class RoleController {
 
     @GetMapping("/role")
     public ResponseEntity<List<FindRoleDto>> findAll(){
-        return ResponseEntity.status(HttpStatus.FOUND).body(service.findAll());
+        return ResponseEntity.ok().body(service.findAll());
     }
 
     @GetMapping("/role/id/{id}")
