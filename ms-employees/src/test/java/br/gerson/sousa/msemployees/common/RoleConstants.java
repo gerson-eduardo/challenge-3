@@ -16,7 +16,6 @@ public class RoleConstants {
     public static final List<Role> ROLE_LIST = Arrays.asList(ROLE, ROLE2);
 
     public static final SaveRoleDto S_ROLE_DTO = new SaveRoleDto(EMPLOYEE.getCpf(), "USER");
-    public static final SaveRoleDto S_ROLE_DTO2 = new SaveRoleDto(EMPLOYEE2.getCpf(), "ADMIN");
     public static final FindRoleDto F_ROLE_DTO = new FindRoleDto(ROLE);
     public static final FindRoleDto F_ROLE_DTO2 = new FindRoleDto(ROLE2);
     public static final List<FindRoleDto> F_ROLE_DTO_LIST = Arrays.asList(F_ROLE_DTO, F_ROLE_DTO2);
