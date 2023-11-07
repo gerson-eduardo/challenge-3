@@ -210,11 +210,35 @@ class RoleControllerTest {
     }
 
     @Test
-    void deleteById() {
+    void deleteById_role_exists() throws Exception{
+        Mockito.doNothing().when(service).deleteById(1L);
+
+        mvc.perform(MockMvcRequestBuilders.delete("/api/v1/role/id/1"))
+                .andExpect(MockMvcResultMatchers.status().isAccepted());
     }
 
     @Test
-    void deleteByCpf() {
+    void deleteById_role_dont_exists() throws Exception{
+        Mockito.doThrow(EntityNotFoundException.class).when(service).deleteById(1L);
+
+        mvc.perform(MockMvcRequestBuilders.delete("/api/v1/role/id/1"))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    void deleteByCpf_role_exists() throws Exception{
+        Mockito.doNothing().when(service).deleteByCpf(F_ROLE_DTO.getCpf());
+
+        mvc.perform(MockMvcRequestBuilders.delete("/api/v1/role/" + F_ROLE_DTO.getCpf()))
+                .andExpect(MockMvcResultMatchers.status().isAccepted());
+    }
+
+    @Test
+    void deleteByCpf_role_dont_exists() throws Exception{
+        Mockito.doThrow(EntityNotFoundException.class).when(service).deleteByCpf(F_ROLE_DTO.getCpf());
+
+        mvc.perform(MockMvcRequestBuilders.delete("/api/v1/role/" + F_ROLE_DTO.getCpf()))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
     public String objectToJson(Object obj) throws JsonProcessingException {
