@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -84,8 +85,32 @@ class RoleControllerTest {
     }
 
     @Test
-    void findAll(){
-}
+    void findAll_roles_exists() throws Exception{
+        List<FindRoleDto> dtoList = F_ROLE_DTO_LIST;
+
+        when(service.findAll()).thenReturn(F_ROLE_DTO_LIST);
+
+        mvc.perform(MockMvcRequestBuilders.get("/api/v1/role")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].role").value("ADMIN"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].role").value("USER"));
+    }
+
+    @Test
+    void findAll_roles_unexistent() throws Exception{
+        List<FindRoleDto> emptyList = new ArrayList<>();
+
+        when(service.findAll()).thenReturn(emptyList);
+
+        mvc.perform(MockMvcRequestBuilders.get("/api/v1/role")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isEmpty());
+    }
 
     @Test
     void findById() {
