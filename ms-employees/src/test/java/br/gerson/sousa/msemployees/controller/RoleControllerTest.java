@@ -165,7 +165,48 @@ class RoleControllerTest {
     }
 
     @Test
-    void update() {
+    void update_role_exists() throws Exception{
+        SaveRoleDto dto = S_ROLE_DTO;
+        String contentType = "text/plain;charset=UTF-8";
+
+        Mockito.doNothing().when(service).update(dto);
+
+        mvc.perform(MockMvcRequestBuilders.put("/api/v1/role")
+                .content(objectToJson(dto))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType(contentType))
+                .andExpect(MockMvcResultMatchers.content().string("Role updated successfully!"));
+    }
+
+    @Test
+    void update_role_dont_exists() throws Exception{
+        SaveRoleDto dto = S_ROLE_DTO;
+        String contentType = "text/plain;charset=UTF-8";
+
+        Mockito.doThrow(EntityNotFoundException.class).when(service).update(dto);
+
+        mvc.perform(MockMvcRequestBuilders.put("/api/v1/role")
+                .content(objectToJson(dto))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andExpect(MockMvcResultMatchers.content().contentType(contentType))
+                .andExpect(MockMvcResultMatchers.content().string("Role not found"));
+    }
+
+    @Test
+    void update_role_dont_have_permision() throws Exception{
+        SaveRoleDto dto = S_ROLE_DTO;
+        String contentType = "text/plain;charset=UTF-8";
+
+        Mockito.doThrow(InvalidRoleException.class).when(service).update(dto);
+
+        mvc.perform(MockMvcRequestBuilders.put("/api/v1/role")
+                .content(objectToJson(dto))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.content().contentType(contentType))
+                .andExpect(MockMvcResultMatchers.content().string("Invalid ROLE type in request"));
     }
 
     @Test
