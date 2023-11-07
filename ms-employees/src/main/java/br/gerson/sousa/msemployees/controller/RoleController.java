@@ -77,13 +77,23 @@ public class RoleController {
     }
     @DeleteMapping("/role/id/{id}")
     public ResponseEntity<String> deleteById(@PathVariable Long id){
-        service.deleteById(id);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Role deleted successfully");
+        try {
+            service.deleteById(id);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Role deleted successfully");
+        }catch(EntityNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Role not found");
+        }
+
     }
 
     @DeleteMapping("/role/{cpf}")
     public ResponseEntity<String> deleteByCpf(@PathVariable String cpf){
-        service.deleteByCpf(cpf);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Role deleted successfully");
+        try {
+            service.deleteByCpf(cpf);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Role deleted successfully");
+        }catch(EntityNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Role not found");
+        }
+
     }
 }
