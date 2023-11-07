@@ -1,6 +1,10 @@
 package br.gerson.sousa.msemployees.controller;
 
+import br.gerson.sousa.msemployees.dto.FindRoleDto;
 import br.gerson.sousa.msemployees.dto.SaveRoleDto;
+import br.gerson.sousa.msemployees.ex.EntityConflictException;
+import br.gerson.sousa.msemployees.ex.EntityNotFoundException;
+import br.gerson.sousa.msemployees.ex.InvalidRoleException;
 import br.gerson.sousa.msemployees.service.RoleService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,8 +18,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static br.gerson.sousa.msemployees.common.RoleConstants.*;
+import static org.mockito.Mockito.when;
 
 @WebMvcTest(RoleController.class)
 class RoleControllerTest {
@@ -29,7 +36,7 @@ class RoleControllerTest {
     private ObjectMapper mapper = new ObjectMapper();
 
     @Test
-    void create() throws Exception {
+    void create_valid_role() throws Exception {
         SaveRoleDto dto = S_ROLE_DTO;
 
         Mockito.doNothing().when(service).create(dto);
@@ -41,8 +48,44 @@ class RoleControllerTest {
     }
 
     @Test
-    void findAll() {
+    void create_invalid_role_user_not_found() throws Exception {
+        SaveRoleDto dto = S_ROLE_DTO;
+
+        Mockito.doThrow(EntityNotFoundException.class).when(service).create(dto);
+
+        mvc.perform(MockMvcRequestBuilders.post("/api/v1/role")
+                        .content(objectToJson(dto))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
+
+    @Test
+    void create_invalid_role_role_already_exists() throws Exception {
+        SaveRoleDto dto = S_ROLE_DTO;
+
+        Mockito.doThrow(EntityConflictException.class).when(service).create(dto);
+
+        mvc.perform(MockMvcRequestBuilders.post("/api/v1/role")
+                        .content(objectToJson(dto))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isConflict());
+    }
+
+    @Test
+    void create_invalid_role_invalid_request() throws Exception {
+        SaveRoleDto dto = S_ROLE_DTO;
+
+        Mockito.doThrow(InvalidRoleException.class).when(service).create(dto);
+
+        mvc.perform(MockMvcRequestBuilders.post("/api/v1/role")
+                        .content(objectToJson(dto))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
+    void findAll(){
+}
 
     @Test
     void findById() {
