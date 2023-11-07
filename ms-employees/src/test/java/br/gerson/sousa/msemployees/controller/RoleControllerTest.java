@@ -139,7 +139,29 @@ class RoleControllerTest {
     }
 
     @Test
-    void findByCpf() {
+    void findByCpf_role_exists() throws Exception{
+        FindRoleDto dto = F_ROLE_DTO;
+
+        when(service.findByCpf(dto.getCpf())).thenReturn(dto);
+
+        mvc.perform(MockMvcRequestBuilders.get("/api/v1/role/employee/" + dto.getCpf())
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(dto.getName()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.role").value(dto.getRole()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.cpf").value(dto.getCpf()));
+    }
+
+    @Test
+    void findByCpf_role_dont_exists() throws Exception{
+        FindRoleDto dto = F_ROLE_DTO;
+
+        Mockito.doThrow(EntityNotFoundException.class).when(service).findByCpf(dto.getCpf());
+
+        mvc.perform(MockMvcRequestBuilders.get("/api/v1/role/employee/" + dto.getCpf())
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
     @Test
