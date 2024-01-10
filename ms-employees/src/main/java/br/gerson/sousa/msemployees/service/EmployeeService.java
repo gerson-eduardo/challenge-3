@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class EmployeeService {
@@ -45,12 +46,10 @@ public class EmployeeService {
     }
 
     public List<FindEmployeeDto> findAll(){
-        List<Employee> employees = employeeRepository.findAll();
-        List<FindEmployeeDto> dtos = new ArrayList<>();
-        for (Employee emp: employees){
-            dtos.add(new FindEmployeeDto(emp));
-        }
-        return dtos;
+        return employeeRepository.findAll()
+                .stream()
+                .map(FindEmployeeDto::new)
+                .collect(Collectors.toList());
     }
     public FindEmployeeDto findById(Long id){
         Optional<Employee> emp = employeeRepository.findById(id);
