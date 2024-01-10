@@ -24,7 +24,6 @@ import static br.gerson.sousa.msemployees.common.EmployeeConstants.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-@Disabled
 class EmployeeServiceTest {
 
     @Mock
@@ -38,24 +37,20 @@ class EmployeeServiceTest {
 
     @Test
     void createEmployeeDontExists() {
-        SaveEmployeeDto new_dto = S_EMP_DTO;
+        when(employeeRepository.findByCpf(S_EMP_DTO.getCpf())).thenReturn(Optional.empty());
 
-        when(employeeRepository.findByCpf(new_dto.getCpf())).thenReturn(Optional.empty());
+        service.create(S_EMP_DTO);
 
-        service.create(new_dto);
-
-        verify(employeeRepository).save(any(Employee.class));
-        verify(roleRepository).save(any(Role.class));
+        verify(employeeRepository, atLeast(1)).save(any(Employee.class));
+        verify(roleRepository, atLeast(1)).save(any(Role.class));
     }
 
     @Test
     void createEmployeeThatExists(){
-        SaveEmployeeDto new_dto = S_EMP_DTO;
-
-        when(employeeRepository.findByCpf(new_dto.getCpf())).thenReturn(Optional.of(new Employee()));
+        when(employeeRepository.findByCpf(S_EMP_DTO.getCpf())).thenReturn(Optional.of(new Employee()));
 
         assertThrows(EntityConflictException.class, () -> {
-            service.create(new_dto);
+            service.create(S_EMP_DTO);
         });
 
         verify(employeeRepository, never()).save(any(Employee.class));
@@ -69,33 +64,9 @@ class EmployeeServiceTest {
         List<FindEmployeeDto> dto_list = service.findAll();
 
         verify(employeeRepository, atLeast(1)).findAll();
-            Long employeeId = 1L;
-            Employee existingEmployee = new Employee();
-            existingEmployee.setId(employeeId);
-            existingEmployee.setName("John Doe");
+
         assertFalse(dto_list.isEmpty());
         assertEquals(EMPLOYEE_LIST.get(1).getName(), dto_list.get(1).getName());
-    }
-
-    @Test
-    void findById() {
-        {
-            //employee exists
-            when(employeeRepository.findById(1L)).thenReturn(Optional.of(EMPLOYEE));
-
-            FindEmployeeDto dto = service.findById(1L);
-
-            assertNotNull(dto);
-
-            verify(employeeRepository, atLeast(1)).findById(1L);
-            assertEquals(EMPLOYEE.getName(), dto.getName());
-        }{
-            //employee don't exists
-            when(employeeRepository.findById(99L)).thenReturn(Optional.empty());
-            assertThrows(EntityNotFoundException.class, () -> {
-                service.findById(99L);
-            });
-        }
     }
 
     @Test
@@ -117,36 +88,64 @@ class EmployeeServiceTest {
     }
 
     @Test
-    void findByCpf() {
-        {
-            //Employee Exists
+    void findById_employee_exists() {
+            when(employeeRepository.findById(1L)).thenReturn(Optional.of(EMPLOYEE));
+
+            FindEmployeeDto dto = service.findById(1L);
+
+            assertNotNull(dto);
+
+            verify(employeeRepository, atLeast(1)).findById(1L);
+            assertEquals(EMPLOYEE.getName(), dto.getName());
+    }
+
+    @Test
+    void findById_employee_dont_exists() {
+            when(employeeRepository.findById(99L)).thenReturn(Optional.empty());
+            assertThrows(EntityNotFoundException.class, () -> {
+                service.findById(99L);
+            });
+    }
+
+    @Test
+    void findByCpf_employee_exists() {
             when(employeeRepository.findByCpf("25369242038")).thenReturn(Optional.of(EMPLOYEE));
 
             FindEmployeeDto dto = service.findByCpf("25369242038");
 
             verify(employeeRepository, atLeast(1)).findByCpf("25369242038");
             assertEquals(EMPLOYEE.getCpf(), dto.getCpf());
-        }{//employee don't exists
+    }
+
+    @Test
+    void findByCpf_employee_dont_exists() {
             when(employeeRepository.findByCpf("25369242038")).thenReturn(Optional.empty());
             assertThrows(EntityNotFoundException.class, () -> {
                 service.findByCpf("25369242038");
             });
-        }
     }
 
     @Test
-    void update() {
-        SaveEmployeeDto new_dto = S_EMP_DTO;
+    void update_employee_exists() {
+        when(employeeRepository.findByCpf(S_EMP_DTO.getCpf())).thenReturn(Optional.of(EMPLOYEE));
 
-        Employee emp = EMPLOYEE;
+        assertDoesNotThrow(() ->{
+            service.update(S_EMP_DTO);
+        });
 
-        when(employeeRepository.findByCpf(new_dto.getCpf())).thenReturn(Optional.of(emp));
+        verify(employeeRepository, times(1)).save(EMPLOYEE);
+    }
 
-        service.update(new_dto);
+    @Test
+    void update_employee_dont_exists() {
+        when(employeeRepository.findByCpf(S_EMP_DTO.getCpf())).thenReturn(Optional.empty());
 
-        verify(employeeRepository, times(1)).save(emp);
+        assertThrows(EntityNotFoundException.class, () ->{
+            service.update(S_EMP_DTO);
+        });
 
-        assertEquals(new_dto.getName(), emp.getName());
+        verify(employeeRepository, never()).save(EMPLOYEE);
+
     }
 
     @Test
@@ -166,7 +165,6 @@ class EmployeeServiceTest {
 
     @Test
     void deleteByCpf() {
-
         when(employeeRepository.findByCpf("25369242038")).thenReturn(Optional.of(EMPLOYEE));
         FindEmployeeDto dto = service.findByCpf("25369242038");
 
