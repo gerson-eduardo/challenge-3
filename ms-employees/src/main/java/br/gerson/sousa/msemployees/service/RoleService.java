@@ -18,6 +18,7 @@ import javax.management.relation.RoleNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class RoleService {
@@ -40,18 +41,15 @@ public class RoleService {
             throw new EntityConflictException("Role with cpf " + dto.getCpf() + "already present!");
         }else if(!dto.getRole().equals("ADMIN") && !dto.getRole().equals("USER")){
             throw new InvalidRoleException("Invalid role found in request. ROLE: " + dto.getRole());
-        }else{
-            roleRepository.save(new Role(emp.get(), dto.getRole()));
         }
+        roleRepository.save(new Role(emp.get(), dto.getRole()));
     }
 
     public List<FindRoleDto> findAll(){
-        List<Role> roles= roleRepository.findAll();
-        List<FindRoleDto> dtos = new ArrayList<>();
-        for(Role role: roles){
-            dtos.add(new FindRoleDto(role));
-        }
-        return dtos;
+        return roleRepository.findAll()
+                .stream()
+                .map(FindRoleDto::new)
+                .collect(Collectors.toList());
     }
 
     public FindRoleDto findById(Long id){
