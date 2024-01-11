@@ -100,6 +100,12 @@ public class EmployeeController {
         }
     }
 
+    @Operation(summary = "Update an employee inside the database", method = "PUT")
+    @ApiResponses( value = {
+            @ApiResponse(responseCode = "200", description = "Employee updated inside the database"),
+            @ApiResponse(responseCode = "404", description = "Employee not found in the database"),
+            @ApiResponse(responseCode = "500", description = "Server error")
+    })
     @PutMapping("/employee")
     public ResponseEntity<String > update(@RequestBody SaveEmployeeDto dto){
         try {
