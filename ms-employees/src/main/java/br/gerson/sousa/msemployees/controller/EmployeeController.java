@@ -52,7 +52,7 @@ public class EmployeeController {
     })
     @GetMapping("/employee")
     public ResponseEntity<List<FindEmployeeDto>> findAll(){
-        return ResponseEntity.status(HttpStatus.FOUND).body(service.findAll());
+        return ResponseEntity.ok().body(service.findAll());
     }
 
     @Operation(summary = "Find an employee inside the database by their ID", method = "GET")
