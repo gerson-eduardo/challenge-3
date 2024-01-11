@@ -66,6 +66,12 @@ public class RoleController {
     }
 
     @GetMapping("/role/id/{id}")
+    @Operation(summary = "Find a role inside the database based in their ID", method = "GET")
+    @ApiResponses( value = {
+            @ApiResponse(responseCode = "200", description = "Return role by their ID"),
+            @ApiResponse(responseCode = "404", description = "Role not found in the database"),
+            @ApiResponse(responseCode = "500", description = "Server error")
+    })
     public ResponseEntity<FindRoleDto> findById(@PathVariable Long id){
         try {
             return ResponseEntity.ok().body(service.findById(id));
@@ -74,6 +80,12 @@ public class RoleController {
         }
     }
 
+    @Operation(summary = "Find a role inside the database based in their CPF", method = "GET")
+    @ApiResponses( value = {
+            @ApiResponse(responseCode = "200", description = "Return role by their CPF"),
+            @ApiResponse(responseCode = "404", description = "Role not found in the database"),
+            @ApiResponse(responseCode = "500", description = "Server error")
+    })
     @GetMapping("/role/employee/{cpf}")
     public ResponseEntity<FindRoleDto> findByCpf(@PathVariable String cpf){
         try {
