@@ -113,7 +113,14 @@ public class RoleController {
             return ResponseEntity.status(404).body("Role not found");
         }
     }
+
     @DeleteMapping("/role/id/{id}")
+    @Operation(summary = "Deletes a role inside the database by their id", method = "DELETE")
+    @ApiResponses( value = {
+            @ApiResponse(responseCode = "202", description = "Role deleted sucessfully"),
+            @ApiResponse(responseCode = "404", description = "Role not found in the database"),
+            @ApiResponse(responseCode = "500", description = "Server error")
+    })
     public ResponseEntity<String> deleteById(@PathVariable Long id){
         try {
             service.deleteById(id);
@@ -125,6 +132,12 @@ public class RoleController {
     }
 
     @DeleteMapping("/role/{cpf}")
+    @Operation(summary = "Deletes a role inside the database by their CPF", method = "DELETE")
+    @ApiResponses( value = {
+            @ApiResponse(responseCode = "202", description = "Role deleted sucessfully"),
+            @ApiResponse(responseCode = "404", description = "Role not found in the database"),
+            @ApiResponse(responseCode = "500", description = "Server error")
+    })
     public ResponseEntity<String> deleteByCpf(@PathVariable String cpf){
         try {
             service.deleteByCpf(cpf);
