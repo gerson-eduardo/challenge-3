@@ -50,8 +50,6 @@ public class RoleController {
             return ResponseEntity.status(404).body("User not found");
         }catch(EntityConflictException e){
             return ResponseEntity.status(409).body("Role already created");
-        }catch(InvalidRoleException e){
-            return ResponseEntity.status(400).body("Invalid Request");
         }
     }
 
@@ -97,6 +95,13 @@ public class RoleController {
 
 
     @PutMapping("/role")
+    @Operation(summary = "Updates a role inside the database", method = "PUT")
+    @ApiResponses( value = {
+            @ApiResponse(responseCode = "200", description = "Role updated sucessfully"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "404", description = "Role not found in the database"),
+            @ApiResponse(responseCode = "500", description = "Server error")
+    })
     public ResponseEntity<String> update(@RequestBody SaveRoleDto dto){
         if(!dto.getRole().equals("ADMIN") && !dto.getRole().equals("USER")){
             return ResponseEntity.status(400).body("Invalid role in the request");
@@ -106,8 +111,6 @@ public class RoleController {
             return ResponseEntity.status(HttpStatus.OK).body("Role updated successfully!");
         }catch(EntityNotFoundException e){
             return ResponseEntity.status(404).body("Role not found");
-        }catch(InvalidRoleException e){
-            return ResponseEntity.status(400).body("Invalid ROLE type in request");
         }
     }
     @DeleteMapping("/role/id/{id}")
