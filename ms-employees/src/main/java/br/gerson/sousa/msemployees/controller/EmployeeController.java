@@ -116,6 +116,12 @@ public class EmployeeController {
         }
     }
 
+    @Operation(summary = "Delete an employee inside the database by their CPF", method = "DELETE")
+    @ApiResponses( value = {
+            @ApiResponse(responseCode = "202", description = "Employee deleted from the database"),
+            @ApiResponse(responseCode = "404", description = "Employee not found in the database"),
+            @ApiResponse(responseCode = "500", description = "Server error")
+    })
     @DeleteMapping("/employee/{cpf}")
     public ResponseEntity<String> deleteByCpf(@PathVariable String  cpf){
         try {
@@ -127,6 +133,12 @@ public class EmployeeController {
 
     }
 
+    @Operation(summary = "Delete an employee inside the database by their ID", method = "DELETE")
+    @ApiResponses( value = {
+            @ApiResponse(responseCode = "202", description = "Employee deleted from the database"),
+            @ApiResponse(responseCode = "404", description = "Employee not found in the database"),
+            @ApiResponse(responseCode = "500", description = "Server error")
+    })
     @DeleteMapping("/employee/id/{id}")
     public ResponseEntity<String> deleteById(@PathVariable Long id){
         try {
