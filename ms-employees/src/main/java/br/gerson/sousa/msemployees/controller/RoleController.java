@@ -28,6 +28,9 @@ public class RoleController {
 
     @PostMapping("/role")
     public ResponseEntity<String> create(@RequestBody SaveRoleDto dto){
+        if(!dto.getRole().equals("ADMIN") && !dto.getRole().equals("USER")){
+            return ResponseEntity.status(400).body("Invalid role in the request");
+        }
         try {
             service.create(dto);
             return ResponseEntity.status(HttpStatus.CREATED).body("Role created successfully!");
@@ -66,6 +69,9 @@ public class RoleController {
 
     @PutMapping("/role")
     public ResponseEntity<String> update(@RequestBody SaveRoleDto dto){
+        if(!dto.getRole().equals("ADMIN") && !dto.getRole().equals("USER")){
+            return ResponseEntity.status(400).body("Invalid role in the request");
+        }
         try {
             service.update(dto);
             return ResponseEntity.status(HttpStatus.OK).body("Role updated successfully!");

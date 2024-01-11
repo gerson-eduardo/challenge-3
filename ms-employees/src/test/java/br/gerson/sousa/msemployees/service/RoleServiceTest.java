@@ -61,16 +61,6 @@ class RoleServiceTest {
     }
 
     @Test
-    void createRole_employee_exists_with_invalid_dto_role(){
-        when(employeeRepository.findByCpf(S_ROLE_DTO.getCpf())).thenReturn(Optional.of(EMPLOYEE));
-        when(roleRepository.findByEmployee_Cpf(S_ROLE_DTO.getCpf())).thenReturn(Optional.empty());
-
-        assertThrows(InvalidRoleException.class, () -> {
-            service.create(new SaveRoleDto(S_ROLE_DTO.getCpf(), "INVALID_ROLE"));
-        });
-    }
-
-    @Test
     void findAll() {
         when(roleRepository.findAll()).thenReturn(ROLE_LIST);
         List<FindRoleDto> dtoList = service.findAll();
@@ -122,15 +112,6 @@ class RoleServiceTest {
     void update_role_dont_exists() {
         when(roleRepository.findByEmployee_Cpf(S_ROLE_DTO.getCpf())).thenReturn(Optional.empty());
         assertThrows(EntityNotFoundException.class, () -> service.update(S_ROLE_DTO));
-
-        verify(roleRepository, atLeast(1)).findByEmployee_Cpf(S_ROLE_DTO.getCpf());
-        verify(roleRepository, never()).save(ROLE);
-    }
-
-    @Test
-    void update_role_with_invalid_role_type() {
-        when(roleRepository.findByEmployee_Cpf(S_ROLE_DTO.getCpf())).thenReturn(Optional.of(ROLE));
-        assertThrows(InvalidRoleException.class, () -> service.update(new SaveRoleDto(S_ROLE_DTO.getCpf(), "INVALID_ROLE")));
 
         verify(roleRepository, atLeast(1)).findByEmployee_Cpf(S_ROLE_DTO.getCpf());
         verify(roleRepository, never()).save(ROLE);
