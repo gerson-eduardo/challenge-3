@@ -47,7 +47,7 @@ public class EmployeeController {
 
     @Operation(summary = "Find all employees inside the database", method = "GET")
     @ApiResponses( value = {
-            @ApiResponse(responseCode = "201", description = "Return a list of all employees inside the database"),
+            @ApiResponse(responseCode = "200", description = "Return a list of all employees inside the database"),
             @ApiResponse(responseCode = "500", description = "Server error")
     })
     @GetMapping("/employee")
@@ -55,6 +55,12 @@ public class EmployeeController {
         return ResponseEntity.status(HttpStatus.FOUND).body(service.findAll());
     }
 
+    @Operation(summary = "Find an employee inside the database by their ID", method = "GET")
+    @ApiResponses( value = {
+            @ApiResponse(responseCode = "200", description = "Employee found inside the database"),
+            @ApiResponse(responseCode = "404", description = "Employee not found in the database"),
+            @ApiResponse(responseCode = "500", description = "Server error")
+    })
     @GetMapping("/employee/id/{id}")
     public ResponseEntity<FindEmployeeDto> findByid(@PathVariable Long id){
         try {
@@ -64,6 +70,12 @@ public class EmployeeController {
         }
     }
 
+    @Operation(summary = "Find an employee inside the database by their CPF", method = "GET")
+    @ApiResponses( value = {
+            @ApiResponse(responseCode = "200", description = "Employee found inside the database"),
+            @ApiResponse(responseCode = "404", description = "Employee not found in the database"),
+            @ApiResponse(responseCode = "500", description = "Server error")
+    })
     @GetMapping("/employee/{cpf}")
     public ResponseEntity<FindEmployeeDto> findByCpf(@PathVariable String cpf){
         try {
@@ -73,6 +85,12 @@ public class EmployeeController {
         }
     }
 
+    @Operation(summary = "Find an employee inside the database by their email", method = "GET")
+    @ApiResponses( value = {
+            @ApiResponse(responseCode = "200", description = "Employee found inside the database"),
+            @ApiResponse(responseCode = "404", description = "Employee not found in the database"),
+            @ApiResponse(responseCode = "500", description = "Server error")
+    })
     @GetMapping("/employee/email/{email}")
     public ResponseEntity<FindEmployeeDto> findByEmail(@PathVariable String email){
         try {
