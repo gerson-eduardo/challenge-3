@@ -45,6 +45,11 @@ public class EmployeeController {
         }
     }
 
+    @Operation(summary = "Find all employees inside the database", method = "GET")
+    @ApiResponses( value = {
+            @ApiResponse(responseCode = "201", description = "Return a list of all employees inside the database"),
+            @ApiResponse(responseCode = "500", description = "Server error")
+    })
     @GetMapping("/employee")
     public ResponseEntity<List<FindEmployeeDto>> findAll(){
         return ResponseEntity.status(HttpStatus.FOUND).body(service.findAll());
