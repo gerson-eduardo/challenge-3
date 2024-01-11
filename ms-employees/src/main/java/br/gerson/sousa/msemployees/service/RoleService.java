@@ -39,8 +39,6 @@ public class RoleService {
             throw new EntityNotFoundException("Role with cpf " + dto.getCpf() + " not found!");
         }else if(roleRepository.findByEmployee_Cpf(dto.getCpf()).isPresent()){
             throw new EntityConflictException("Role with cpf " + dto.getCpf() + "already present!");
-        }else if(!dto.getRole().equals("ADMIN") && !dto.getRole().equals("USER")){
-            throw new InvalidRoleException("Invalid role found in request. ROLE: " + dto.getRole());
         }
         roleRepository.save(new Role(emp.get(), dto.getRole()));
     }
@@ -73,12 +71,9 @@ public class RoleService {
         Optional<Role> role = roleRepository.findByEmployee_Cpf(dto.getCpf());
         if(role.isEmpty()){
             throw new EntityNotFoundException("Role with cpf " + "not found!");
-        }else if(!dto.getRole().equals("ADMIN") && !dto.getRole().equals("USER")){
-            throw new InvalidRoleException("Invalid role found in request. ROLE: " + dto.getRole());
-        }else{
-            role.get().setRole(dto.getRole());
-            roleRepository.save(role.get());
         }
+        role.get().setRole(dto.getRole());
+        roleRepository.save(role.get());
     }
 
     @Transactional
