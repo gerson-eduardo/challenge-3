@@ -7,6 +7,10 @@ import br.gerson.sousa.msemployees.ex.EntityNotFoundException;
 import br.gerson.sousa.msemployees.ex.InvalidRoleException;
 import br.gerson.sousa.msemployees.model.Role;
 import br.gerson.sousa.msemployees.service.RoleService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +21,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1")
+@Tag(name = "role-controller")
 public class RoleController {
 
     private RoleService service;
@@ -27,6 +32,13 @@ public class RoleController {
     }
 
     @PostMapping("/role")
+    @Operation(summary = "Creates a role inside the database", method = "POST")
+    @ApiResponses( value = {
+            @ApiResponse(responseCode = "201", description = "Role created sucessfully"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "409", description = "Role already exists in the database"),
+            @ApiResponse(responseCode = "500", description = "Server error")
+    })
     public ResponseEntity<String> create(@RequestBody SaveRoleDto dto){
         if(!dto.getRole().equals("ADMIN") && !dto.getRole().equals("USER")){
             return ResponseEntity.status(400).body("Invalid role in the request");
@@ -38,17 +50,26 @@ public class RoleController {
             return ResponseEntity.status(404).body("User not found");
         }catch(EntityConflictException e){
             return ResponseEntity.status(409).body("Role already created");
-        }catch(InvalidRoleException e){
-            return ResponseEntity.status(400).body("Invalid Request");
         }
     }
 
     @GetMapping("/role")
+    @Operation(summary = "Find all roles inside the database", method = "GET")
+    @ApiResponses( value = {
+            @ApiResponse(responseCode = "200", description = "Return all roles from the database"),
+            @ApiResponse(responseCode = "500", description = "Server error")
+    })
     public ResponseEntity<List<FindRoleDto>> findAll(){
         return ResponseEntity.ok().body(service.findAll());
     }
 
     @GetMapping("/role/id/{id}")
+    @Operation(summary = "Find a role inside the database based in their ID", method = "GET")
+    @ApiResponses( value = {
+            @ApiResponse(responseCode = "200", description = "Return role by their ID"),
+            @ApiResponse(responseCode = "404", description = "Role not found in the database"),
+            @ApiResponse(responseCode = "500", description = "Server error")
+    })
     public ResponseEntity<FindRoleDto> findById(@PathVariable Long id){
         try {
             return ResponseEntity.ok().body(service.findById(id));
@@ -57,6 +78,12 @@ public class RoleController {
         }
     }
 
+    @Operation(summary = "Find a role inside the database based in their CPF", method = "GET")
+    @ApiResponses( value = {
+            @ApiResponse(responseCode = "200", description = "Return role by their CPF"),
+            @ApiResponse(responseCode = "404", description = "Role not found in the database"),
+            @ApiResponse(responseCode = "500", description = "Server error")
+    })
     @GetMapping("/role/employee/{cpf}")
     public ResponseEntity<FindRoleDto> findByCpf(@PathVariable String cpf){
         try {
@@ -68,6 +95,13 @@ public class RoleController {
 
 
     @PutMapping("/role")
+    @Operation(summary = "Updates a role inside the database", method = "PUT")
+    @ApiResponses( value = {
+            @ApiResponse(responseCode = "200", description = "Role updated sucessfully"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "404", description = "Role not found in the database"),
+            @ApiResponse(responseCode = "500", description = "Server error")
+    })
     public ResponseEntity<String> update(@RequestBody SaveRoleDto dto){
         if(!dto.getRole().equals("ADMIN") && !dto.getRole().equals("USER")){
             return ResponseEntity.status(400).body("Invalid role in the request");
@@ -77,11 +111,16 @@ public class RoleController {
             return ResponseEntity.status(HttpStatus.OK).body("Role updated successfully!");
         }catch(EntityNotFoundException e){
             return ResponseEntity.status(404).body("Role not found");
-        }catch(InvalidRoleException e){
-            return ResponseEntity.status(400).body("Invalid ROLE type in request");
         }
     }
+
     @DeleteMapping("/role/id/{id}")
+    @Operation(summary = "Deletes a role inside the database by their id", method = "DELETE")
+    @ApiResponses( value = {
+            @ApiResponse(responseCode = "202", description = "Role deleted sucessfully"),
+            @ApiResponse(responseCode = "404", description = "Role not found in the database"),
+            @ApiResponse(responseCode = "500", description = "Server error")
+    })
     public ResponseEntity<String> deleteById(@PathVariable Long id){
         try {
             service.deleteById(id);
@@ -93,6 +132,12 @@ public class RoleController {
     }
 
     @DeleteMapping("/role/{cpf}")
+    @Operation(summary = "Deletes a role inside the database by their CPF", method = "DELETE")
+    @ApiResponses( value = {
+            @ApiResponse(responseCode = "202", description = "Role deleted sucessfully"),
+            @ApiResponse(responseCode = "404", description = "Role not found in the database"),
+            @ApiResponse(responseCode = "500", description = "Server error")
+    })
     public ResponseEntity<String> deleteByCpf(@PathVariable String cpf){
         try {
             service.deleteByCpf(cpf);
