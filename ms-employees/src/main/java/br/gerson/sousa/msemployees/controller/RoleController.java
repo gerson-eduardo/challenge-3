@@ -7,6 +7,10 @@ import br.gerson.sousa.msemployees.ex.EntityNotFoundException;
 import br.gerson.sousa.msemployees.ex.InvalidRoleException;
 import br.gerson.sousa.msemployees.model.Role;
 import br.gerson.sousa.msemployees.service.RoleService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +21,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1")
+@Tag(name = "role-controller")
 public class RoleController {
 
     private RoleService service;
@@ -27,6 +32,13 @@ public class RoleController {
     }
 
     @PostMapping("/role")
+    @Operation(summary = "Creates a role inside the database", method = "POST")
+    @ApiResponses( value = {
+            @ApiResponse(responseCode = "201", description = "Role created sucessfully"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "409", description = "Role already exists in the database"),
+            @ApiResponse(responseCode = "500", description = "Server error")
+    })
     public ResponseEntity<String> create(@RequestBody SaveRoleDto dto){
         if(!dto.getRole().equals("ADMIN") && !dto.getRole().equals("USER")){
             return ResponseEntity.status(400).body("Invalid role in the request");
