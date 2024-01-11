@@ -56,6 +56,11 @@ public class RoleController {
     }
 
     @GetMapping("/role")
+    @Operation(summary = "Find all roles inside the database", method = "GET")
+    @ApiResponses( value = {
+            @ApiResponse(responseCode = "200", description = "Return all roles from the database"),
+            @ApiResponse(responseCode = "500", description = "Server error")
+    })
     public ResponseEntity<List<FindRoleDto>> findAll(){
         return ResponseEntity.ok().body(service.findAll());
     }
