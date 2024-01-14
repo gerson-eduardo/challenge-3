@@ -22,6 +22,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ProposalService {
@@ -90,16 +91,14 @@ public class ProposalService {
     }
 
     public List<FindProposalDto> findALl(){
-        List<FindProposalDto> dtos = new ArrayList<>();
-        for(Proposal proposal: proposalRepository.findAll()){
-            dtos.add(new FindProposalDto(proposal));
-        }return dtos;
+        return proposalRepository.findAll().stream()
+                .map(FindProposalDto::new)
+                .collect(Collectors.toList());
     }
     public List<FindProposalDto> findAllByResult(boolean result){
-        List<FindProposalDto> dtos = new ArrayList<>();
-        for(Proposal proposal: proposalRepository.findAllByApproved(result)){
-            dtos.add(new FindProposalDto(proposal));
-        }return dtos;
+        return proposalRepository.findAllByApproved(result).stream()
+                .map(FindProposalDto::new)
+                .collect(Collectors.toList());
     }
 
     public FindProposalDto findById(Long id){
