@@ -29,14 +29,16 @@ public class ProposalService {
     private ProposalRepository proposalRepository;
     private VoteRepository voteRepository;
     private RoleFeignClient feignClient;
-    private DateFormatter formatter= new DateFormatter();
-    private RoleValidation validation = new RoleValidation();
+    private DateFormatter formatter;
+    private RoleValidation validation;
 
     @Autowired
-    public ProposalService(ProposalRepository proposalRepository, VoteRepository voteRepository, RoleFeignClient feignClient){
+    public ProposalService(ProposalRepository proposalRepository, VoteRepository voteRepository, RoleFeignClient feignClient, DateFormatter formatter, RoleValidation validation){
         this.proposalRepository = proposalRepository;
         this.voteRepository = voteRepository;
         this.feignClient = feignClient;
+        this.formatter = formatter;
+        this.validation = validation;
     }
 
     @Transactional
